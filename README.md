@@ -1,0 +1,1 @@
+# boosty-kujibiki-pwa-app
