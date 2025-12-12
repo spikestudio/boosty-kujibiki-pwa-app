@@ -329,13 +329,6 @@
       min-height: 1.5em;
     }
 
-    .result-sub {
-      margin-top: 4px;
-      font-size: 0.9rem;
-      color: #777;
-      min-height: 1.3em;
-    }
-
     .details-toggle-row {
       margin-top: 10px;
     }
@@ -564,9 +557,7 @@
           <button class="gacha-button" type="button">START!</button>
           <button class="gacha-button" type="button">START!</button>
         </div>
-
         <div id="result-text" class="result-text"></div>
-        <div id="result-sub" class="result-sub"></div>
 
         <div class="next-person-row">
           <button id="next-person-button" class="next-person-button" type="button">
@@ -1177,7 +1168,6 @@
     const nextPersonButton = document.getElementById("next-person-button");
     const nextPartButton = document.getElementById("next-part-button");
     const resultText = document.getElementById("result-text");
-    const resultSub = document.getElementById("result-sub");
     const ball = document.getElementById("ball");
 
     const statusPart = document.getElementById("status-part");
@@ -1281,7 +1271,6 @@
 
     function clearResultDisplay() {
       resultText.textContent = "";
-      resultSub.textContent = "";
       if (lotteryState.state.drawnCount === 0) {
         placeholderText.style.display = "block";
         resultImage.style.opacity = 0;
@@ -1530,9 +1519,6 @@
         placeholderText.style.display = "block";
         resultImage.style.opacity = 0;
         resultText.textContent = "";
-        resultSub.textContent = "";
-      } else {
-        resultSub.textContent = "直前の1回を取り消しました。";
       }
     }
 
@@ -1563,8 +1549,6 @@
       if (isSpinning || s.remainingTickets <= 0 || sessionBlocked) {
         if (sessionBlocked) {
           resultText.textContent = "今回の挑戦回数は終了しました。";
-          resultSub.textContent =
-            "設定から次の挑戦回数を入力してください。";
         }
         return;
       }
@@ -1573,7 +1557,6 @@
       updateButtonsState();
 
       resultText.textContent = "抽選中...";
-      resultSub.textContent = "";
       placeholderText.style.display = "none";
 
       playSafe(startSound, 1000);
@@ -1619,12 +1602,9 @@
         const c2 = lotteryState.config;
         if (outcome === "win") {
           resultText.textContent = c2.winText || "当たり！";
-          resultSub.textContent = "おめでとうございます！";
           playSafe(resultWinSound);
         } else {
           resultText.textContent = "ハズレ…";
-          resultSub.textContent =
-            "残りの当たり本数を確認して続けてください。";
           playSafe(resultLoseSound);
         }
 
