@@ -1559,18 +1559,12 @@
         c.maxSessionDraw != null &&
         s.sessionRemainingDraws != null &&
         s.sessionRemainingDraws <= 0;
-      // ★ 当たりがすべて出ているかどうか
-      const noWinsLeft = c.totalWins > 0 && s.remainingWins <= 0;
 
-      if (isSpinning || s.remainingTickets <= 0 || sessionBlocked || noWinsLeft) {
+      if (isSpinning || s.remainingTickets <= 0 || sessionBlocked) {
         if (sessionBlocked) {
           resultText.textContent = "今回の挑戦回数は終了しました。";
           resultSub.textContent =
             "設定から次の挑戦回数を入力してください。";
-        } else if (noWinsLeft) {
-          resultText.textContent = "当たりはすべて出ました。";
-          resultSub.textContent =
-            "この部のガチャは終了です。「次の部へ」を押してください。";
         }
         return;
       }
@@ -1632,13 +1626,6 @@
           resultSub.textContent =
             "残りの当たり本数を確認して続けてください。";
           playSafe(resultLoseSound);
-        }
-
-        // ★ この抽選で当たりがすべて出きった場合の案内
-        const sNow = lotteryState.state;
-        if (c2.totalWins > 0 && sNow.remainingWins <= 0) {
-          resultSub.textContent +=
-            "（これで当たりはすべて出ました。この部のガチャは終了です。）";
         }
 
         setTimeout(() => {
