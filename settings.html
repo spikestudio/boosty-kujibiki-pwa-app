@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#ff7a2b" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="ガチャ抽選設定" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <title>ローカルガチャ抽選機 設定</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: #f4f4f4;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 16px;
+    }
+    .app {
+      width: min(720px, 100vw - 24px);
+    }
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .settings {
+      background: #fff;
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+      text-align: left;
+      font-size: 0.9rem;
+    }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: #f0f0f0;
+      text-decoration: none;
+      color: #333;
+      font-weight: 700;
+    }
+    h2 {
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+    .env {
+      font-size: 0.8rem;
+      color: #999;
+      margin-bottom: 8px;
+    }
+    .settings-section-title {
+      margin-top: 12px;
+      margin-bottom: 4px;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    .note {
+      color: #777;
+      margin-bottom: 8px;
+      line-height: 1.4;
+      font-size: 0.85rem;
+    }
+    .settings-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .settings-row label {
+      min-width: 120px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+    .settings-row input[type="number"],
+    .settings-row input[type="text"] {
+      flex: 1;
+      font-size: 0.95rem;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      min-width: 0;
+    }
+    .settings-row button.settings-main-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: none;
+      background: #1976d2;
+      color: #fff;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+    .image-setting-row,
+    .sound-setting-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .image-setting-row span.key-label,
+    .sound-setting-row span.key-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: #eee;
+      font-size: 0.9rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .image-preview {
+      width: 36px;
+      height: 36px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid #ddd;
+      flex-shrink: 0;
+    }
+    .small-label {
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+    .prize-label-input {
+      flex: 1;
+      min-width: 100px;
+      font-size: 0.9rem;
+      padding: 5px 6px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .prize-win-count {
+      width: 70px;
+      font-size: 0.85rem;
+      padding: 4px 5px;
+    }
+    .sound-label-text {
+      min-width: 90px;
+      font-size: 0.85rem;
+    }
+    .image-setting-row input[type="file"],
+    .sound-setting-row input[type="file"] {
+      flex: 1;
+      font-size: 0.85rem;
+    }
+    .image-setting-row button,
+    .sound-setting-row button {
+      border: none;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 0.85rem;
+      background: #eee;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .settings-footer {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>ローカルガチャ抽選機 設定</h1>
+    <div class="settings">
+      <a class="back-link" href="index.html">← ガチャ画面へ戻る</a>
+      <h2>環境情報</h2>
+      <div id="env-info" class="env"></div>
+
+      <div class="settings-section-title">抽選設定</div>
+      <p class="note">
+        総くじ数（玉の総数）と合計当たり本数を設定します。<br />
+        各画像ごとの当たり本数の合計と、ここで設定する「合計当たり本数」が一致している必要があります。
+      </p>
+
+      <div class="settings-row">
+        <label for="input-title">タイトル</label>
+        <input
+          id="input-title"
+          type="text"
+          placeholder="例: ローカルガチャ抽選機"
+        />
+      </div>
+      <div class="settings-row">
+        <label for="input-total-tickets">総くじ数</label>
+        <input
+          id="input-total-tickets"
+          type="number"
+          min="1"
+          step="1"
+          placeholder="例: 100"
+        />
+      </div>
+      <div class="settings-row">
+        <label for="input-total-wins">合計当たり本数</label>
+        <input
+          id="input-total-wins"
+          type="number"
+          min="0"
+          step="1"
+          placeholder="例: 10"
+        />
+      </div>
+      <div class="settings-row">
+        <label for="input-win-text">当たりテキスト</label>
+        <input
+          id="input-win-text"
+          type="text"
+          placeholder="例: 大当たり！"
+        />
+      </div>
+
+      <div class="settings-row">
+        <label>設定反映</label>
+        <button
+          id="apply-config-button"
+          type="button"
+          class="settings-main-btn"
+        >
+          抽選設定を保存して現在の部をリセット
+        </button>
+      </div>
+
+      <div class="settings-section-title">画像設定（A〜E）</div>
+      <p class="note">
+        A〜E の画像ごとに「有効／無効」「当たり／ハズレ」「当たり本数」「表示名（ラベル）」を設定できます。<br>
+        各画像の当たり本数の合計が、上記「合計当たり本数」と一致している必要があります。<br>
+        画像を設定しない場合は、同階層の a.png〜e.png が使われます。
+      </p>
+
+      <div class="image-setting-row" data-key="A">
+        <span class="key-label">A</span>
+        <img class="image-preview" alt="Aプレビュー" />
+        <input
+          type="text"
+          class="prize-label-input"
+          placeholder="表示名（例: 1等）"
+        />
+        <label class="small-label">
+          <input type="checkbox" class="prize-enabled" checked />
+          有効
+        </label>
+        <label class="small-label">
+          <input type="checkbox" class="prize-is-win" checked />
+          当たり
+        </label>
+        <input
+          type="number"
+          class="prize-win-count"
+          min="0"
+          step="1"
+          value="10"
+          title="Aの当たり本数"
+        />
+        <input type="file" accept="image/*" />
+        <button type="button" class="clear-btn">画像解除</button>
+      </div>
+
+      <div class="image-setting-row" data-key="B">
+        <span class="key-label">B</span>
+        <img class="image-preview" alt="Bプレビュー" />
+        <input
+          type="text"
+          class="prize-label-input"
+          placeholder="表示名（例: 2等）"
+        />
+        <label class="small-label">
+          <input type="checkbox" class="prize-enabled" checked />
+          有効
+        </label>
+        <label class="small-label">
+          <input type="checkbox" class="prize-is-win" />
+          当たり
+        </label>
+        <input
+          type="number"
+          class="prize-win-count"
+          min="0"
+          step="1"
+          value="0"
+          title="Bの当たり本数"
+        />
+        <input type="file" accept="image/*" />
+        <button type="button" class="clear-btn">画像解除</button>
+      </div>
+
+      <div class="image-setting-row" data-key="C">
+        <span class="key-label">C</span>
+        <img class="image-preview" alt="Cプレビュー" />
+        <input
+          type="text"
+          class="prize-label-input"
+          placeholder="表示名（例: 3等）"
+        />
+        <label class="small-label">
+          <input type="checkbox" class="prize-enabled" checked />
+          有効
+        </label>
+        <label class="small-label">
+          <input type="checkbox" class="prize-is-win" />
+          当たり
+        </label>
+        <input
+          type="number"
+          class="prize-win-count"
+          min="0"
+          step="1"
+          value="0"
+          title="Cの当たり本数"
+        />
+        <input type="file" accept="image/*" />
+        <button type="button" class="clear-btn">画像解除</button>
+      </div>
+
+      <div class="image-setting-row" data-key="D">
+        <span class="key-label">D</span>
+        <img class="image-preview" alt="Dプレビュー" />
+        <input
+          type="text"
+          class="prize-label-input"
+          placeholder="表示名"
+        />
+        <label class="small-label">
+          <input type="checkbox" class="prize-enabled" checked />
+          有効
+        </label>
+        <label class="small-label">
+          <input type="checkbox" class="prize-is-win" />
+          当たり
+        </label>
+        <input
+          type="number"
+          class="prize-win-count"
+          min="0"
+          step="1"
+          value="0"
+          title="Dの当たり本数"
+        />
+        <input type="file" accept="image/*" />
+        <button type="button" class="clear-btn">画像解除</button>
+      </div>
+
+      <div class="image-setting-row" data-key="E">
+        <span class="key-label">E</span>
+        <img class="image-preview" alt="Eプレビュー" />
+        <input
+          type="text"
+          class="prize-label-input"
+          placeholder="表示名"
+        />
+        <label class="small-label">
+          <input type="checkbox" class="prize-enabled" checked />
+          有効
+        </label>
+        <label class="small-label">
+          <input type="checkbox" class="prize-is-win" />
+          当たり
+        </label>
+        <input
+          type="number"
+          class="prize-win-count"
+          min="0"
+          step="1"
+          value="0"
+          title="Eの当たり本数"
+        />
+        <input type="file" accept="image/*" />
+        <button type="button" class="clear-btn">画像解除</button>
+      </div>
+
+      <div class="settings-section-title">サウンド設定</div>
+      <p class="note">
+        ガチャ回転時と当たり／ハズレ時の効果音を設定できます。<br>
+        設定しない場合は、同階層の roulette.mp3 / atari.mp3 / hazure.mp3 を使用します（存在する場合）。
+      </p>
+
+      <div class="sound-setting-row" data-sound-key="start">
+        <span class="key-label">S</span>
+        <span class="sound-label-text">回転時</span>
+        <input type="file" accept="audio/*" />
+        <button type="button" class="sound-clear-btn">解除</button>
+      </div>
+      <div class="sound-setting-row" data-sound-key="resultWin">
+        <span class="key-label">W</span>
+        <span class="sound-label-text">当たり時</span>
+        <input type="file" accept="audio/*" />
+        <button type="button" class="sound-clear-btn">解除</button>
+      </div>
+      <div class="sound-setting-row" data-sound-key="resultLose">
+        <span class="key-label">L</span>
+        <span class="sound-label-text">ハズレ時</span>
+        <input type="file" accept="audio/*" />
+        <button type="button" class="sound-clear-btn">解除</button>
+      </div>
+
+      <div class="settings-footer">
+        ※ ブラウザのストレージを削除すると、抽選状態・画像・サウンド設定は再度設定が必要になります。
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PRIZE_KEYS = ["A", "B", "C", "D", "E"];
+
+    const enableServiceWorker =
+      "serviceWorker" in navigator &&
+      (window.isSecureContext ||
+        location.protocol === "https:" ||
+        location.hostname === "localhost" ||
+        location.hostname === "127.0.0.1");
+
+    if (enableServiceWorker) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("./sw.js")
+          .catch((err) =>
+            console.warn("Service Worker registration failed:", err)
+          );
+      });
+    }
+
+    // ===== 画像ソース管理 =====
+    const IMAGE_STORAGE_KEY = "gachaImageSourcesV1";
+    let imageSources = {};
+
+    function loadImageSources() {
+      try {
+        const raw = localStorage.getItem(IMAGE_STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === "object") {
+            imageSources = parsed;
+          }
+        }
+      } catch (e) {
+        imageSources = {};
+      }
+    }
+
+    function saveImageSources() {
+      try {
+        localStorage.setItem(IMAGE_STORAGE_KEY, JSON.stringify(imageSources));
+      } catch (e) {}
+    }
+
+    function getImageSrc(key, defaultPath) {
+      if (imageSources && imageSources[key]) {
+        return imageSources[key];
+      }
+      return defaultPath;
+    }
+
+    loadImageSources();
+
+    // ===== サウンドソース管理 =====
+    const SOUND_STORAGE_KEY = "gachaSoundSourcesV1";
+    let soundSources = {};
+
+    function loadSoundSources() {
+      try {
+        const raw = localStorage.getItem(SOUND_STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === "object") {
+            soundSources = parsed;
+          }
+        }
+      } catch (e) {
+        soundSources = {};
+      }
+    }
+
+    function saveSoundSources() {
+      try {
+        localStorage.setItem(SOUND_STORAGE_KEY, JSON.stringify(soundSources));
+      } catch (e) {}
+    }
+
+    loadSoundSources();
+
+    const LOTTERY_STORAGE_KEY = "gachaLotteryStateV3";
+    let lotteryState = {
+      version: 3,
+      currentPart: 1,
+      config: {
+        totalTickets: 100,
+        totalWins: 10,
+        title: "ローカルガチャ抽選機",
+        winText: "大当たり！",
+        maxSessionDraw: 3,
+      },
+      prizes: [],
+      state: {
+        drawnCount: 0,
+        winCount: 0,
+        personDrawnCount: 0,
+        personWinCount: 0,
+        remainingTickets: 100,
+        remainingWins: 10,
+        prizeRemainingWins: {},
+        sessionRemainingDraws: 3,
+      },
+      lastDraw: null,
+    };
+
+    function loadLotteryState() {
+      try {
+        const raw = localStorage.getItem(LOTTERY_STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === "object" && parsed.config && parsed.state) {
+            lotteryState = parsed;
+          }
+        }
+      } catch (e) {}
+    }
+
+    function saveLotteryState() {
+      try {
+        localStorage.setItem(LOTTERY_STORAGE_KEY, JSON.stringify(lotteryState));
+      } catch (e) {}
+    }
+
+    function ensurePrizesInitialized() {
+      if (!Array.isArray(lotteryState.prizes)) {
+        lotteryState.prizes = [];
+      }
+      const existingKeys = new Set(lotteryState.prizes.map((p) => p.key));
+      PRIZE_KEYS.forEach((key) => {
+        if (!existingKeys.has(key)) {
+          lotteryState.prizes.push({
+            key,
+            label: key + "賞",
+            defaultPath: key.toLowerCase() + ".png",
+            enabled: true,
+            isWin: key === "A",
+            winCountTotal: key === "A" ? 10 : 0,
+          });
+        }
+      });
+
+      const sumWins =
+        lotteryState.prizes.reduce(
+          (acc, p) =>
+            acc + (p.enabled && p.isWin ? (p.winCountTotal || 0) : 0),
+          0
+        ) || 0;
+
+      if (
+        !lotteryState.config ||
+        typeof lotteryState.config.totalTickets !== "number" ||
+        lotteryState.config.totalTickets <= 0
+      ) {
+        lotteryState.config = {
+          totalTickets: Math.max(sumWins || 100, 1),
+          totalWins: sumWins || 10,
+          title: "ローカルガチャ抽選機",
+          winText: "大当たり！",
+          maxSessionDraw: 3,
+        };
+      } else {
+        lotteryState.config.totalWins = sumWins;
+        if (!("maxSessionDraw" in lotteryState.config)) {
+          lotteryState.config.maxSessionDraw = 3;
+        }
+        if (!("title" in lotteryState.config)) {
+          lotteryState.config.title = "ローカルガチャ抽選機";
+        }
+      }
+
+      if (!lotteryState.state || typeof lotteryState.state !== "object") {
+        lotteryState.state = {
+          drawnCount: 0,
+          winCount: 0,
+          personDrawnCount: 0,
+          personWinCount: 0,
+          remainingTickets: lotteryState.config.totalTickets,
+          remainingWins: sumWins,
+          prizeRemainingWins: {},
+          sessionRemainingDraws:
+            lotteryState.config.maxSessionDraw != null
+              ? lotteryState.config.maxSessionDraw
+              : null,
+        };
+      }
+
+      if (!lotteryState.state.prizeRemainingWins) {
+        lotteryState.state.prizeRemainingWins = {};
+        let remWins = 0;
+        lotteryState.prizes.forEach((p) => {
+          const w = p.enabled && p.isWin ? (p.winCountTotal || 0) : 0;
+          lotteryState.state.prizeRemainingWins[p.key] = w;
+          remWins += w;
+        });
+        lotteryState.state.remainingWins = remWins;
+      }
+
+      if (!("personDrawnCount" in lotteryState.state)) {
+        lotteryState.state.personDrawnCount = 0;
+      }
+      if (!("personWinCount" in lotteryState.state)) {
+        lotteryState.state.personWinCount = 0;
+      }
+
+      if (
+        lotteryState.config.maxSessionDraw != null &&
+        (lotteryState.state.sessionRemainingDraws == null ||
+          lotteryState.state.sessionRemainingDraws >
+            lotteryState.config.maxSessionDraw)
+      ) {
+        lotteryState.state.sessionRemainingDraws =
+          lotteryState.config.maxSessionDraw;
+      }
+
+      saveLotteryState();
+    }
+
+    loadLotteryState();
+    ensurePrizesInitialized();
+
+    const envInfo = document.getElementById("env-info");
+    const inputTitle = document.getElementById("input-title");
+    const inputTotalTickets = document.getElementById("input-total-tickets");
+    const inputTotalWins = document.getElementById("input-total-wins");
+    const inputWinText = document.getElementById("input-win-text");
+    const applyConfigButton = document.getElementById("apply-config-button");
+
+    try {
+      const href = location.href || "";
+      if (envInfo) {
+        if (href.startsWith("content://")) {
+          envInfo.textContent =
+            "現在のURL: content:// ... （ローカルファイル・コンテンツ経由）";
+        } else if (href.startsWith("file://")) {
+          envInfo.textContent = "現在のURL: file:// ... （ローカルファイル）";
+        } else if (href.startsWith("http")) {
+          envInfo.textContent = "現在のURL: " + href.split("#")[0];
+        }
+      }
+    } catch (e) {
+      if (envInfo) envInfo.textContent = "";
+    }
+
+    function updateConfigInputs() {
+      const c = lotteryState.config;
+      if (inputTitle) inputTitle.value = c.title || "ローカルガチャ抽選機";
+      if (inputTotalTickets) inputTotalTickets.value = c.totalTickets;
+      if (inputTotalWins) inputTotalWins.value = c.totalWins;
+      if (inputWinText) inputWinText.value = c.winText || "";
+    }
+
+    function resetStateForCurrentPart() {
+      const c = lotteryState.config;
+      const prizes = lotteryState.prizes;
+      const prizeRemainingWins = {};
+      let totalWins = 0;
+      prizes.forEach((p) => {
+        const w = p.enabled && p.isWin ? (p.winCountTotal || 0) : 0;
+        prizeRemainingWins[p.key] = w;
+        totalWins += w;
+      });
+      lotteryState.config.totalWins = totalWins;
+      lotteryState.state = {
+        drawnCount: 0,
+        winCount: 0,
+        personDrawnCount: 0,
+        personWinCount: 0,
+        remainingTickets: c.totalTickets,
+        remainingWins: totalWins,
+        prizeRemainingWins,
+        sessionRemainingDraws:
+          c.maxSessionDraw != null ? c.maxSessionDraw : null,
+      };
+      lotteryState.lastDraw = null;
+      saveLotteryState();
+    }
+
+    function syncPrizeUIFromState() {
+      const prizes = lotteryState.prizes || [];
+      const rows = document.querySelectorAll(".image-setting-row");
+      rows.forEach((row) => {
+        const key = row.getAttribute("data-key");
+        const prize = prizes.find((p) => p.key === key);
+        const enabledEl = row.querySelector(".prize-enabled");
+        const isWinEl = row.querySelector(".prize-is-win");
+        const winCountInput = row.querySelector(".prize-win-count");
+        const labelInput = row.querySelector(".prize-label-input");
+
+        if (prize) {
+          if (enabledEl) enabledEl.checked = !!prize.enabled;
+          if (isWinEl) isWinEl.checked = !!prize.isWin;
+          if (winCountInput)
+            winCountInput.value =
+              typeof prize.winCountTotal === "number"
+                ? prize.winCountTotal
+                : 0;
+          if (labelInput)
+            labelInput.value = prize.label || (prize.key + "賞");
+        }
+      });
+    }
+
+    function refreshImagePreviews() {
+      const rows = document.querySelectorAll(".image-setting-row");
+      rows.forEach((row) => {
+        const key = row.getAttribute("data-key");
+        const preview = row.querySelector(".image-preview");
+        if (imageSources[key]) {
+          preview.src = imageSources[key];
+          preview.style.opacity = "1";
+        } else {
+          const defPath = key.toLowerCase() + ".png";
+          preview.src = defPath;
+          preview.style.opacity = "0.5";
+        }
+      });
+    }
+
+    function setupImageSettings() {
+      const rows = document.querySelectorAll(".image-setting-row");
+      rows.forEach((row) => {
+        const key = row.getAttribute("data-key");
+        const fileInput = row.querySelector('input[type="file"]');
+        const clearBtn = row.querySelector(".clear-btn");
+
+        fileInput.addEventListener("change", () => {
+          const file = fileInput.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            imageSources[key] = e.target.result;
+            saveImageSources();
+            refreshImagePreviews();
+          };
+          reader.readAsDataURL(file);
+        });
+
+        clearBtn.addEventListener("click", () => {
+          delete imageSources[key];
+          saveImageSources();
+          fileInput.value = "";
+          refreshImagePreviews();
+        });
+      });
+
+      refreshImagePreviews();
+      syncPrizeUIFromState();
+    }
+
+    function setupSoundSettings() {
+      const rows = document.querySelectorAll(".sound-setting-row");
+      rows.forEach((row) => {
+        const key = row.getAttribute("data-sound-key");
+        const fileInput = row.querySelector('input[type="file"]');
+        const clearBtn = row.querySelector(".sound-clear-btn");
+
+        fileInput.addEventListener("change", () => {
+          const file = fileInput.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            soundSources[key] = e.target.result;
+            saveSoundSources();
+          };
+          reader.readAsDataURL(file);
+        });
+
+        clearBtn.addEventListener("click", () => {
+          delete soundSources[key];
+          saveSoundSources();
+          fileInput.value = "";
+        });
+      });
+    }
+
+    if (applyConfigButton) {
+      applyConfigButton.addEventListener("click", () => {
+        const totalTickets = parseInt(inputTotalTickets.value, 10);
+        const totalWinsInput = parseInt(inputTotalWins.value, 10);
+        const winText = inputWinText.value.trim() || "大当たり！";
+        const titleText = inputTitle.value.trim() || "ローカルガチャ抽選機";
+
+        if (isNaN(totalTickets) || totalTickets <= 0) {
+          alert("総くじ数は1以上の整数で入力してください。");
+          return;
+        }
+        if (isNaN(totalWinsInput) || totalWinsInput < 0) {
+          alert("合計当たり本数は0以上の整数で入力してください。");
+          return;
+        }
+
+        const rows = document.querySelectorAll(".image-setting-row");
+        const prizes = [];
+        let sumPrizeWins = 0;
+
+        rows.forEach((row) => {
+          const key = row.getAttribute("data-key");
+          const labelInput = row.querySelector(".prize-label-input");
+          const enabledEl = row.querySelector(".prize-enabled");
+          const isWinEl = row.querySelector(".prize-is-win");
+          const winCountInput = row.querySelector(".prize-win-count");
+
+          const enabled = enabledEl ? enabledEl.checked : true;
+          let isWin = isWinEl ? isWinEl.checked : false;
+          let winCount = parseInt(winCountInput ? winCountInput.value : "0", 10);
+
+          if (!enabled) {
+            isWin = false;
+            winCount = 0;
+          }
+          if (isNaN(winCount) || winCount < 0) {
+            winCount = 0;
+          }
+
+          if (isWin && winCount > 0) {
+            sumPrizeWins += winCount;
+          } else {
+            winCount = 0;
+          }
+
+          const labelRaw = labelInput ? labelInput.value : "";
+          prizes.push({
+            key,
+            label: labelRaw && labelRaw.trim() !== "" ? labelRaw.trim() : key + "賞",
+            defaultPath: key.toLowerCase() + ".png",
+            enabled,
+            isWin,
+            winCountTotal: winCount,
+          });
+        });
+
+        if (sumPrizeWins !== totalWinsInput) {
+          alert(
+            "各画像の当たり本数の合計 (" +
+              sumPrizeWins +
+              ") と、合計当たり本数 (" +
+              totalWinsInput +
+              ") が一致していません。"
+          );
+          return;
+        }
+        if (totalWinsInput > totalTickets) {
+          alert("合計当たり本数は総くじ数以下にしてください。");
+          return;
+        }
+
+        lotteryState.prizes = prizes;
+        lotteryState.config.totalTickets = totalTickets;
+        lotteryState.config.totalWins = totalWinsInput;
+        lotteryState.config.title = titleText;
+        lotteryState.config.winText = winText;
+
+        resetStateForCurrentPart();
+        saveLotteryState();
+        updateConfigInputs();
+        alert("設定を保存してリセットしました。ガチャ画面に戻ってください。");
+      });
+    }
+
+    updateConfigInputs();
+    setupImageSettings();
+    setupSoundSettings();
+  </script>
+</body>
+</html>

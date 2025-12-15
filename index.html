@@ -27,13 +27,14 @@
       color: #333;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center;
       min-height: 100vh;
+      padding: 24px;
     }
 
     .app {
-      width: min(520px, 100vw - 32px);
-      margin: 16px;
+      width: min(960px, 100vw - 48px);
+      margin: 0 auto;
       text-align: center;
     }
 
@@ -51,8 +52,8 @@
     .machine {
       background: #ffffff;
       border-radius: 16px;
-      padding: 16px 16px 20px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      padding: 20px 20px 22px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
       position: relative;
       overflow: hidden;
     }
@@ -61,14 +62,14 @@
       width: 100%;
       aspect-ratio: 4 / 3;
       background: linear-gradient(135deg, #fefefe, #f0f0f0);
-      border-radius: 12px;
+      border-radius: 16px;
       border: 2px solid #ddd;
       display: flex;
       justify-content: center;
       align-items: center;
       overflow: hidden;
       position: relative;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
 
     .window img {
@@ -135,17 +136,17 @@
     .session-summary {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      margin: 10px 0 6px;
+      gap: 12px;
+      margin: 14px 0 8px;
     }
 
     .summary-item {
       background: linear-gradient(135deg, #fff2e3, #ffe3d0);
       border-radius: 12px;
-      padding: 10px;
+      padding: 12px;
       text-align: left;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6),
-        0 6px 14px rgba(0, 0, 0, 0.08);
+        0 8px 16px rgba(0, 0, 0, 0.1);
     }
 
     .summary-label {
@@ -193,19 +194,19 @@
     .gacha-controls {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-top: 6px;
+      gap: 12px;
+      margin-top: 8px;
     }
 
     .slot-buttons {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      gap: 10px;
     }
 
     .gacha-button {
       width: 100%;
-      padding: 16px 10px;
+      padding: 18px 12px;
       border-radius: 16px;
       border: none;
       font-size: 1rem;
@@ -323,36 +324,52 @@
     }
 
     .result-text {
-      margin-top: 10px;
-      font-size: 1.1rem;
+      margin-top: 18px;
+      font-size: 1.15rem;
       font-weight: 700;
       min-height: 1.5em;
     }
 
     .details-toggle-row {
-      margin-top: 10px;
+      margin-top: 12px;
+      text-align: center;
     }
 
     .details-toggle-row button {
       border: none;
       border-radius: 999px;
-      padding: 8px 14px;
-      font-size: 0.9rem;
+      padding: 10px 16px;
+      font-size: 0.95rem;
       background: #f0f0f0;
       cursor: pointer;
     }
 
     .details-panel {
       display: none;
-      margin-top: 8px;
+      margin-top: 10px;
       background: #f9f9f9;
       border-radius: 12px;
-      padding: 10px 12px;
+      padding: 12px 14px;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
     }
 
     .details-panel.open {
       display: block;
+    }
+
+    .settings-link {
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    .settings-link a {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: #f0f0f0;
+      color: #333;
+      text-decoration: none;
+      font-weight: 700;
     }
 
     .footer {
@@ -609,247 +626,9 @@
       </div>
     </div>
 
-    <div class="footer">
-      PC では同じフォルダに <code>a.png〜e.png</code> と
-      <code>roulette.mp3</code> / <code>atari.mp3</code> / <code>hazure.mp3</code> を置くと自動で読み込みます。<br>
-      スマホで <code>content://</code> として開いた場合は、下の「画像設定」「サウンド設定」を使用してください。
-    </div>
-
-    <div class="settings">
-      <h2>環境情報</h2>
-      <div id="env-info" class="env"></div>
-
-      <div class="settings-section-title">抽選設定</div>
-      <p class="note">
-        総くじ数（玉の総数）と合計当たり本数を設定します。<br />
-        各画像ごとの当たり本数の合計と、ここで設定する「合計当たり本数」が一致している必要があります。
-      </p>
-
-      <div class="settings-row">
-        <label for="input-title">タイトル</label>
-        <input
-          id="input-title"
-          type="text"
-          placeholder="例: ローカルガチャ抽選機"
-        />
+      <div class="settings-link">
+        <a href="settings.html">設定ページを開く</a>
       </div>
-      <div class="settings-row">
-        <label for="input-total-tickets">総くじ数</label>
-        <input
-          id="input-total-tickets"
-          type="number"
-          min="1"
-          step="1"
-          placeholder="例: 100"
-        />
-      </div>
-      <div class="settings-row">
-        <label for="input-total-wins">合計当たり本数</label>
-        <input
-          id="input-total-wins"
-          type="number"
-          min="0"
-          step="1"
-          placeholder="例: 10"
-        />
-      </div>
-      <div class="settings-row">
-        <label for="input-win-text">当たりテキスト</label>
-        <input
-          id="input-win-text"
-          type="text"
-          placeholder="例: 大当たり！"
-        />
-      </div>
-
-      <div class="settings-row">
-        <label>設定反映</label>
-        <button
-          id="apply-config-button"
-          type="button"
-          class="settings-main-btn"
-        >
-          抽選設定を保存して現在の部をリセット
-        </button>
-      </div>
-
-      <div class="settings-section-title">画像設定（A〜E）</div>
-      <p class="note">
-        A〜E の画像ごとに「有効／無効」「当たり／ハズレ」「当たり本数」「表示名（ラベル）」を設定できます。<br>
-        各画像の当たり本数の合計が、上記「合計当たり本数」と一致している必要があります。<br>
-        画像を設定しない場合は、同階層の a.png〜e.png が使われます。
-      </p>
-
-      <!-- A〜E 固定枠（有効／当たり／当たり本数／ラベルを設定可能） -->
-      <div class="image-setting-row" data-key="A">
-        <span class="key-label">A</span>
-        <img class="image-preview" alt="Aプレビュー" />
-        <input
-          type="text"
-          class="prize-label-input"
-          placeholder="表示名（例: 1等）"
-        />
-        <label class="small-label">
-          <input type="checkbox" class="prize-enabled" checked />
-          有効
-        </label>
-        <label class="small-label">
-          <input type="checkbox" class="prize-is-win" checked />
-          当たり
-        </label>
-        <input
-          type="number"
-          class="prize-win-count"
-          min="0"
-          step="1"
-          value="10"
-          title="Aの当たり本数"
-        />
-        <input type="file" accept="image/*" />
-        <button type="button" class="clear-btn">画像解除</button>
-      </div>
-
-      <div class="image-setting-row" data-key="B">
-        <span class="key-label">B</span>
-        <img class="image-preview" alt="Bプレビュー" />
-        <input
-          type="text"
-          class="prize-label-input"
-          placeholder="表示名（例: 2等）"
-        />
-        <label class="small-label">
-          <input type="checkbox" class="prize-enabled" checked />
-          有効
-        </label>
-        <label class="small-label">
-          <input type="checkbox" class="prize-is-win" />
-          当たり
-        </label>
-        <input
-          type="number"
-          class="prize-win-count"
-          min="0"
-          step="1"
-          value="0"
-          title="Bの当たり本数"
-        />
-        <input type="file" accept="image/*" />
-        <button type="button" class="clear-btn">画像解除</button>
-      </div>
-
-      <div class="image-setting-row" data-key="C">
-        <span class="key-label">C</span>
-        <img class="image-preview" alt="Cプレビュー" />
-        <input
-          type="text"
-          class="prize-label-input"
-          placeholder="表示名（例: 3等）"
-        />
-        <label class="small-label">
-          <input type="checkbox" class="prize-enabled" checked />
-          有効
-        </label>
-        <label class="small-label">
-          <input type="checkbox" class="prize-is-win" />
-          当たり
-        </label>
-        <input
-          type="number"
-          class="prize-win-count"
-          min="0"
-          step="1"
-          value="0"
-          title="Cの当たり本数"
-        />
-        <input type="file" accept="image/*" />
-        <button type="button" class="clear-btn">画像解除</button>
-      </div>
-
-      <div class="image-setting-row" data-key="D">
-        <span class="key-label">D</span>
-        <img class="image-preview" alt="Dプレビュー" />
-        <input
-          type="text"
-          class="prize-label-input"
-          placeholder="表示名"
-        />
-        <label class="small-label">
-          <input type="checkbox" class="prize-enabled" checked />
-          有効
-        </label>
-        <label class="small-label">
-          <input type="checkbox" class="prize-is-win" />
-          当たり
-        </label>
-        <input
-          type="number"
-          class="prize-win-count"
-          min="0"
-          step="1"
-          value="0"
-          title="Dの当たり本数"
-        />
-        <input type="file" accept="image/*" />
-        <button type="button" class="clear-btn">画像解除</button>
-      </div>
-
-      <div class="image-setting-row" data-key="E">
-        <span class="key-label">E</span>
-        <img class="image-preview" alt="Eプレビュー" />
-        <input
-          type="text"
-          class="prize-label-input"
-          placeholder="表示名"
-        />
-        <label class="small-label">
-          <input type="checkbox" class="prize-enabled" checked />
-          有効
-        </label>
-        <label class="small-label">
-          <input type="checkbox" class="prize-is-win" />
-          当たり
-        </label>
-        <input
-          type="number"
-          class="prize-win-count"
-          min="0"
-          step="1"
-          value="0"
-          title="Eの当たり本数"
-        />
-        <input type="file" accept="image/*" />
-        <button type="button" class="clear-btn">画像解除</button>
-      </div>
-
-      <div class="settings-section-title">サウンド設定</div>
-      <p class="note">
-        ガチャ回転時と当たり／ハズレ時の効果音を設定できます。<br>
-        設定しない場合は、同階層の roulette.mp3 / atari.mp3 / hazure.mp3 を使用します（存在する場合）。
-      </p>
-
-      <div class="sound-setting-row" data-sound-key="start">
-        <span class="key-label">S</span>
-        <span class="sound-label-text">回転時</span>
-        <input type="file" accept="audio/*" />
-        <button type="button" class="sound-clear-btn">解除</button>
-      </div>
-      <div class="sound-setting-row" data-sound-key="resultWin">
-        <span class="key-label">W</span>
-        <span class="sound-label-text">当たり時</span>
-        <input type="file" accept="audio/*" />
-        <button type="button" class="sound-clear-btn">解除</button>
-      </div>
-      <div class="sound-setting-row" data-sound-key="resultLose">
-        <span class="key-label">L</span>
-        <span class="sound-label-text">ハズレ時</span>
-        <input type="file" accept="audio/*" />
-        <button type="button" class="sound-clear-btn">解除</button>
-      </div>
-
-      <div class="settings-footer">
-        ※ ブラウザのストレージを削除すると、抽選状態・画像・サウンド設定は再度設定が必要になります。
-      </div>
-    </div>
   </div>
 
   <script>
@@ -1201,16 +980,18 @@
 
     try {
       const href = location.href || "";
-      if (href.startsWith("content://")) {
-        envInfo.textContent =
-          "現在のURL: content:// ... （ローカルファイル・コンテンツ経由）";
-      } else if (href.startsWith("file://")) {
-        envInfo.textContent = "現在のURL: file:// ... （ローカルファイル）";
-      } else if (href.startsWith("http")) {
-        envInfo.textContent = "現在のURL: " + href.split("#")[0];
+      if (envInfo) {
+        if (href.startsWith("content://")) {
+          envInfo.textContent =
+            "現在のURL: content:// ... （ローカルファイル・コンテンツ経由）";
+        } else if (href.startsWith("file://")) {
+          envInfo.textContent = "現在のURL: file:// ... （ローカルファイル）";
+        } else if (href.startsWith("http")) {
+          envInfo.textContent = "現在のURL: " + href.split("#")[0];
+        }
       }
     } catch (e) {
-      envInfo.textContent = "";
+      if (envInfo) envInfo.textContent = "";
     }
 
     let isSpinning = false;
@@ -1279,16 +1060,16 @@
 
     function updateConfigInputs() {
       const c = lotteryState.config;
-      if (inputTitle) {
-        inputTitle.value = c.title || "ローカルガチャ抽選機";
-      }
-      inputTotalTickets.value = c.totalTickets;
-      inputTotalWins.value = c.totalWins;
-      inputWinText.value = c.winText || "";
-      if (c.maxSessionDraw != null) {
-        inputSessionDraws.value = c.maxSessionDraw;
-      } else {
-        inputSessionDraws.value = "";
+      if (inputTitle) inputTitle.value = c.title || "ローカルガチャ抽選機";
+      if (inputTotalTickets) inputTotalTickets.value = c.totalTickets;
+      if (inputTotalWins) inputTotalWins.value = c.totalWins;
+      if (inputWinText) inputWinText.value = c.winText || "";
+      if (inputSessionDraws) {
+        if (c.maxSessionDraw != null) {
+          inputSessionDraws.value = c.maxSessionDraw;
+        } else {
+          inputSessionDraws.value = "";
+        }
       }
     }
 
@@ -1638,87 +1419,89 @@
     });
 
     // ===== 抽選設定 UI =====
-    applyConfigButton.addEventListener("click", () => {
-      const totalTickets = parseInt(inputTotalTickets.value, 10);
-      const totalWinsInput = parseInt(inputTotalWins.value, 10);
-      const winText = inputWinText.value.trim() || "大当たり！";
-      const titleText = inputTitle.value.trim() || "ローカルガチャ抽選機";
+    if (applyConfigButton) {
+      applyConfigButton.addEventListener("click", () => {
+        const totalTickets = parseInt(inputTotalTickets.value, 10);
+        const totalWinsInput = parseInt(inputTotalWins.value, 10);
+        const winText = inputWinText.value.trim() || "大当たり！";
+        const titleText = inputTitle.value.trim() || "ローカルガチャ抽選機";
 
-      if (isNaN(totalTickets) || totalTickets <= 0) {
-        alert("総くじ数は1以上の整数で入力してください。");
-        return;
-      }
-      if (isNaN(totalWinsInput) || totalWinsInput < 0) {
-        alert("合計当たり本数は0以上の整数で入力してください。");
-        return;
-      }
-
-      const rows = document.querySelectorAll(".image-setting-row");
-      const prizes = [];
-      let sumPrizeWins = 0;
-
-      rows.forEach((row) => {
-        const key = row.getAttribute("data-key");
-        const labelInput = row.querySelector(".prize-label-input");
-        const enabledEl = row.querySelector(".prize-enabled");
-        const isWinEl = row.querySelector(".prize-is-win");
-        const winCountInput = row.querySelector(".prize-win-count");
-
-        const enabled = enabledEl ? enabledEl.checked : true;
-        let isWin = isWinEl ? isWinEl.checked : false;
-        let winCount = parseInt(winCountInput ? winCountInput.value : "0", 10);
-
-        if (!enabled) {
-          isWin = false;
-          winCount = 0;
+        if (isNaN(totalTickets) || totalTickets <= 0) {
+          alert("総くじ数は1以上の整数で入力してください。");
+          return;
         }
-        if (isNaN(winCount) || winCount < 0) {
-          winCount = 0;
+        if (isNaN(totalWinsInput) || totalWinsInput < 0) {
+          alert("合計当たり本数は0以上の整数で入力してください。");
+          return;
         }
 
-        if (isWin && winCount > 0) {
-          sumPrizeWins += winCount;
-        } else {
-          winCount = 0;
-        }
+        const rows = document.querySelectorAll(".image-setting-row");
+        const prizes = [];
+        let sumPrizeWins = 0;
 
-        const labelRaw = labelInput ? labelInput.value : "";
-        prizes.push({
-          key,
-          label: labelRaw && labelRaw.trim() !== "" ? labelRaw.trim() : key + "賞",
-          defaultPath: key.toLowerCase() + ".png",
-          enabled,
-          isWin,
-          winCountTotal: winCount,
+        rows.forEach((row) => {
+          const key = row.getAttribute("data-key");
+          const labelInput = row.querySelector(".prize-label-input");
+          const enabledEl = row.querySelector(".prize-enabled");
+          const isWinEl = row.querySelector(".prize-is-win");
+          const winCountInput = row.querySelector(".prize-win-count");
+
+          const enabled = enabledEl ? enabledEl.checked : true;
+          let isWin = isWinEl ? isWinEl.checked : false;
+          let winCount = parseInt(winCountInput ? winCountInput.value : "0", 10);
+
+          if (!enabled) {
+            isWin = false;
+            winCount = 0;
+          }
+          if (isNaN(winCount) || winCount < 0) {
+            winCount = 0;
+          }
+
+          if (isWin && winCount > 0) {
+            sumPrizeWins += winCount;
+          } else {
+            winCount = 0;
+          }
+
+          const labelRaw = labelInput ? labelInput.value : "";
+          prizes.push({
+            key,
+            label: labelRaw && labelRaw.trim() !== "" ? labelRaw.trim() : key + "賞",
+            defaultPath: key.toLowerCase() + ".png",
+            enabled,
+            isWin,
+            winCountTotal: winCount,
+          });
         });
+
+        if (sumPrizeWins !== totalWinsInput) {
+          alert(
+            "各画像の当たり本数の合計 (" +
+              sumPrizeWins +
+              ") と、合計当たり本数 (" +
+              totalWinsInput +
+              ") が一致していません。"
+          );
+          return;
+        }
+        if (totalWinsInput > totalTickets) {
+          alert("合計当たり本数は総くじ数以下にしてください。");
+          return;
+        }
+
+        lotteryState.prizes = prizes;
+        lotteryState.config.totalTickets = totalTickets;
+        lotteryState.config.totalWins = totalWinsInput;
+        lotteryState.config.title = titleText;
+        lotteryState.config.winText = winText;
+
+        resetStateForCurrentPart();
+        saveLotteryState();
+        updateConfigInputs();
+        updateTitleDisplay();
       });
-
-      if (sumPrizeWins !== totalWinsInput) {
-        alert(
-          "各画像の当たり本数の合計 (" +
-            sumPrizeWins +
-            ") と、合計当たり本数 (" +
-            totalWinsInput +
-            ") が一致していません。"
-        );
-        return;
-      }
-      if (totalWinsInput > totalTickets) {
-        alert("合計当たり本数は総くじ数以下にしてください。");
-        return;
-      }
-
-      lotteryState.prizes = prizes;
-      lotteryState.config.totalTickets = totalTickets;
-      lotteryState.config.totalWins = totalWinsInput;
-      lotteryState.config.title = titleText;
-      lotteryState.config.winText = winText;
-
-      resetStateForCurrentPart();
-      saveLotteryState();
-      updateConfigInputs();
-      updateTitleDisplay();
-    });
+    }
 
     // 挑戦回数設定
     applySessionButton.addEventListener("click", () => {
