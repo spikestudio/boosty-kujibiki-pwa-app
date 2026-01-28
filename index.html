@@ -29,19 +29,19 @@
       justify-content: center;
       align-items: flex-start;
       min-height: 100vh;
-      padding: 12px;
+      padding: 0;
+      margin: 0;
     }
 
     .app {
-      width: min(960px, 100vw - 24px);
-      margin: 0 auto;
+      width: 100vw;
+      margin: 0;
       text-align: center;
     }
 
     h1 {
-      font-size: 1.6rem;
-      margin-bottom: 8px;
-      margin-top: 4px;
+      font-size: 1.4rem;
+      margin: 8px 0 6px 0;
     }
 
     .description {
@@ -52,25 +52,25 @@
 
     .machine {
       background: #ffffff;
-      border-radius: 16px;
-      padding: 16px;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
+      border-radius: 0;
+      padding: 12px;
+      box-shadow: none;
       position: relative;
       overflow: hidden;
     }
 
     .window {
       width: 100%;
-      aspect-ratio: 5 / 3;
+      aspect-ratio: 2 / 1;
       background: linear-gradient(135deg, #fefefe, #f0f0f0);
-      border-radius: 16px;
+      border-radius: 12px;
       border: 2px solid #ddd;
       display: flex;
       justify-content: center;
       align-items: center;
       overflow: hidden;
       position: relative;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .window img {
@@ -137,27 +137,27 @@
     .session-summary {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin: 10px 0 8px;
+      gap: 8px;
+      margin: 6px 0 6px;
     }
 
     .summary-item {
       background: linear-gradient(135deg, #fff2e3, #ffe3d0);
-      border-radius: 12px;
-      padding: 10px;
+      border-radius: 10px;
+      padding: 8px;
       text-align: left;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6),
-        0 8px 16px rgba(0, 0, 0, 0.1);
+        0 6px 12px rgba(0, 0, 0, 0.1);
     }
 
     .summary-label {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: #8a4b20;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     .summary-value {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: #d84315;
     }
@@ -195,27 +195,27 @@
     .gacha-controls {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      margin-top: 6px;
+      gap: 6px;
+      margin-top: 4px;
     }
 
     .slot-buttons {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 8px;
     }
 
     .gacha-button {
       width: 100%;
-      padding: 36px 24px;
-      border-radius: 20px;
+      padding: 30px 20px;
+      border-radius: 16px;
       border: none;
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-weight: 800;
       letter-spacing: 0.5px;
       background: linear-gradient(135deg, #ffb347, #ff7043);
       color: #fff;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.5);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.5);
       cursor: pointer;
       transition: transform 0.08s ease-out, box-shadow 0.08s ease-out,
         opacity 0.2s;
