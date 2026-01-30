@@ -20,15 +20,18 @@
       padding: 0;
     }
 
+    html,
+    body {
+      width: 100%;
+      overflow-x: hidden;
+    }
+
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
         sans-serif;
-      background: #f4f4f4;
+      background: radial-gradient(circle at top, #fff7fb 0%, #fff1f6 45%, #fff 100%);
       color: #333;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
+      min-height: 100dvh;
       padding: 0;
       margin: 0;
     }
@@ -39,9 +42,27 @@
       text-align: center;
     }
 
+    .first-view {
+      min-height: 100dvh;
+      padding: env(safe-area-inset-top)
+        calc(env(safe-area-inset-right) + 12px) 8px
+        calc(env(safe-area-inset-left) + 12px);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .below-fold {
+      padding: 0 calc(env(safe-area-inset-right) + 12px) 16px
+        calc(env(safe-area-inset-left) + 12px);
+    }
+
     h1 {
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       margin: 8px 0 6px 0;
+      color: #c23b6a;
+      letter-spacing: 0.3px;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
     }
 
     .description {
@@ -52,19 +73,19 @@
 
     .machine {
       background: #ffffff;
-      border-radius: 0;
+      border-radius: 18px;
       padding: 12px;
-      box-shadow: none;
+      box-shadow: 0 10px 24px rgba(220, 120, 160, 0.15);
       position: relative;
       overflow: hidden;
     }
 
     .window {
       width: 100%;
-      aspect-ratio: 2 / 1;
-      background: linear-gradient(135deg, #fefefe, #f0f0f0);
-      border-radius: 12px;
-      border: 2px solid #ddd;
+      aspect-ratio: 1.5 / 1;
+      background: linear-gradient(135deg, #fff9fd, #ffeaf2);
+      border-radius: 16px;
+      border: 2px solid #ffd5e3;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -80,86 +101,81 @@
       transition: opacity 0.2s ease-out, transform 0.2s ease-out;
     }
 
+    .confetti {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      top: -10%;
+      left: 50%;
+      width: 12px;
+      height: 18px;
+      border-radius: 4px;
+      opacity: 0.9;
+      transform: translate3d(var(--x, 0px), -20px, 0)
+        rotate(var(--r, 0deg));
+      animation: confettiFall var(--t, 1.6s) ease-out forwards;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    @keyframes confettiFall {
+      0% {
+        transform: translate3d(var(--x, 0px), -30px, 0)
+          rotate(var(--r, 0deg));
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      100% {
+        transform: translate3d(var(--x, 0px), var(--y, 360px), 0)
+          rotate(calc(var(--r, 0deg) + 260deg));
+        opacity: 0;
+      }
+    }
+
     .placeholder-text {
       position: absolute;
       font-size: 0.9rem;
-      color: #888;
+      color: #c05a7a;
       padding: 4px 10px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.8);
-      border: 1px dashed #ccc;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px dashed #f3b9cd;
     }
 
-    .ball {
-      position: absolute;
-      bottom: -32px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #fff, #90caf9);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .ball.show {
-      animation: ballDrop 0.5s ease-out forwards;
-    }
-
-    @keyframes ballDrop {
-      0% {
-        transform: translate(-50%, 10px) scale(0.5);
-        opacity: 0;
-      }
-      100% {
-        transform: translate(-50%, 0) scale(1);
-        opacity: 1;
-      }
-    }
-
-    .ball.hide {
-      animation: ballHide 0.3s ease-in forwards;
-    }
-
-    @keyframes ballHide {
-      0% {
-        opacity: 1;
-        transform: translate(-50%, 0) scale(1);
-      }
-      100% {
-        opacity: 0;
-        transform: translate(-50%, 10px) scale(0.7);
-      }
-    }
 
     .session-summary {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 8px;
-      margin: 6px 0 6px;
+      margin: 44px 0 16px;
     }
 
     .summary-item {
-      background: linear-gradient(135deg, #fff2e3, #ffe3d0);
-      border-radius: 10px;
+      background: linear-gradient(135deg, #fff6fb, #ffe9f2);
+      border-radius: 12px;
       padding: 8px;
       text-align: left;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6),
-        0 6px 12px rgba(0, 0, 0, 0.1);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7),
+        0 6px 12px rgba(210, 110, 150, 0.12);
     }
 
     .summary-label {
-      font-size: 0.75rem;
-      color: #8a4b20;
+      font-size: 1.05rem;
+      color: #b55474;
       margin-bottom: 2px;
     }
 
     .summary-value {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #d84315;
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #c23b6a;
     }
 
     .status-panel {
@@ -195,32 +211,70 @@
     .gacha-controls {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      margin-top: 4px;
+      gap: 90px;
+      margin-top: 40px;
+    }
+
+    .gacha-primary {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    .gacha-secondary {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .slot-buttons {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      gap: 60px;
+      align-items: center;
     }
 
     .gacha-button {
       width: 100%;
-      padding: 30px 20px;
-      border-radius: 16px;
-      border: none;
-      font-size: 1.8rem;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      background: linear-gradient(135deg, #ffb347, #ff7043);
-      color: #fff;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.5);
+      aspect-ratio: 1 / 1;
+      padding: 0;
+      border-radius: 999px;
+      border: 3px solid #f6a1be;
+      font-size: 2.1rem;
+      font-weight: 900;
+      letter-spacing: 0.6px;
+      font-family: "Avenir Next Rounded", "Hiragino Maru Gothic ProN",
+        "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+      background: radial-gradient(
+        circle at 30% 28%,
+        #fff4f8 0%,
+        #ffd3e2 35%,
+        #f8a6c2 70%,
+        #f28aad 100%
+      );
+      color: #ffffff;
+      text-shadow: 0 2px 0 rgba(255, 255, 255, 0.2),
+        0 4px 10px rgba(160, 50, 90, 0.45);
+      box-shadow: 0 12px 20px rgba(230, 120, 160, 0.22),
+        0 10px 18px rgba(200, 90, 130, 0.16),
+        inset 0 10px 14px rgba(255, 255, 255, 0.7),
+        inset 0 -12px 16px rgba(180, 80, 120, 0.22);
       cursor: pointer;
       transition: transform 0.08s ease-out, box-shadow 0.08s ease-out,
         opacity 0.2s;
       position: relative;
       overflow: hidden;
+    }
+
+    .gacha-button::before {
+      content: "";
+      position: absolute;
+      inset: 7%;
+      border-radius: 999px;
+      border: 2px solid rgba(255, 255, 255, 0.65);
+      box-shadow: inset 0 4px 10px rgba(255, 255, 255, 0.45),
+        inset 0 -6px 12px rgba(180, 90, 120, 0.18);
+      pointer-events: none;
     }
 
     .gacha-button::after {
@@ -229,14 +283,32 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 40%;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), transparent);
+      height: 45%;
+      background: radial-gradient(
+        circle at 30% 10%,
+        rgba(255, 255, 255, 0.9) 0%,
+        rgba(255, 255, 255, 0.45) 40%,
+        rgba(255, 255, 255, 0) 70%
+      );
       pointer-events: none;
     }
 
+    .gacha-button span {
+      position: relative;
+      z-index: 1;
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.4);
+    }
+
     .gacha-button:active {
-      transform: translateY(1px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      transform: translateY(2px) scale(0.98);
+      box-shadow: 0 8px 14px rgba(230, 120, 160, 0.2),
+        0 3px 0 #c86b90,
+        inset 0 6px 10px rgba(255, 255, 255, 0.4),
+        inset 0 -10px 14px rgba(180, 90, 120, 0.28);
     }
 
     .gacha-button[disabled] {
@@ -246,21 +318,23 @@
     }
 
     .next-person-row {
-      margin-top: 10px;
+      margin-top: auto;
+      padding-top: 12px;
     }
 
     .next-person-button {
       width: 100%;
       padding: 12px;
-      border-radius: 12px;
+      border-radius: 14px;
       border: none;
       font-size: 0.95rem;
       font-weight: 800;
       letter-spacing: 0.2px;
-      background: linear-gradient(135deg, #ffa351, #ff7043);
-      color: #fff;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      background: linear-gradient(135deg, #ffd5e3, #f7a9c4);
+      color: #8a2b4e;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+      box-shadow: 0 6px 12px rgba(230, 120, 160, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.75);
       cursor: pointer;
     }
 
@@ -270,16 +344,16 @@
       align-items: center;
       gap: 8px;
       padding: 8px 10px;
-      border-radius: 12px;
-      background: #fff5eb;
+      border-radius: 14px;
+      background: #fff6f9;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6),
-        0 4px 10px rgba(0, 0, 0, 0.06);
+        0 4px 10px rgba(230, 120, 160, 0.1);
       font-size: 0.9rem;
     }
 
     .session-inline label {
       font-weight: 700;
-      color: #d25b21;
+      color: #c23b6a;
       white-space: nowrap;
     }
 
@@ -288,18 +362,19 @@
       font-size: 0.95rem;
       padding: 6px 8px;
       border-radius: 8px;
-      border: 1px solid #e0c7b2;
+      border: 1px solid #f0c2d3;
     }
 
     .session-inline button {
       padding: 8px 12px;
       border-radius: 10px;
       border: none;
-      background: linear-gradient(135deg, #ff9800, #ff7043);
-      color: #fff;
+      background: linear-gradient(135deg, #ffd5e3, #f5a7c1);
+      color: #8a2b4e;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 3px 8px rgba(230, 120, 160, 0.2);
     }
 
     .sub-buttons {
@@ -315,7 +390,8 @@
       border-radius: 999px;
       border: none;
       font-size: 0.75rem;
-      background: #eee;
+      background: linear-gradient(135deg, #fff1f6, #ffd9e6);
+      color: #8a2b4e;
       cursor: pointer;
     }
 
@@ -325,11 +401,104 @@
     }
 
     .result-text {
-      margin-top: 8px;
-      font-size: 1.15rem;
-      font-weight: 700;
-      min-height: 1.5em;
+      margin: 78px auto 0;
+      font-size: 2.7rem;
+      font-weight: 900;
+      min-height: 1.8em;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: transparent;
+      color: #c2185b;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7),
+        0 3px 10px rgba(200, 90, 130, 0.2);
+      width: fit-content;
     }
+
+    .result-text.is-win {
+      background: transparent;
+      color: #d84315;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7),
+        0 6px 16px rgba(255, 140, 80, 0.35);
+      animation: cheerPop 0.8s ease-out, cheerPulse 1.6s ease-out;
+    }
+
+    .result-text.is-lose {
+      background: transparent;
+      color: #2c4a7a;
+      animation: none;
+    }
+
+    @keyframes cheerPop {
+      0% {
+        transform: translateY(10px) scale(0.88);
+        opacity: 0.5;
+      }
+      60% {
+        transform: translateY(-8px) scale(1.12);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes cheerGlow {
+      0% {
+        box-shadow: 0 0 0 rgba(255, 200, 120, 0);
+      }
+      70% {
+        box-shadow: 0 0 46px rgba(255, 200, 120, 0.8);
+      }
+      100% {
+        box-shadow: 0 0 0 rgba(255, 200, 120, 0);
+      }
+    }
+
+    .gacha-button.is-win {
+      animation: buttonAura 1.8s ease-out;
+      box-shadow: 0 12px 20px rgba(230, 120, 160, 0.22),
+        0 0 28px rgba(255, 210, 120, 0.7),
+        0 0 46px rgba(255, 210, 120, 0.45),
+        inset 0 10px 14px rgba(255, 255, 255, 0.7),
+        inset 0 -12px 16px rgba(180, 80, 120, 0.22);
+    }
+
+    @keyframes buttonAura {
+      0% {
+        box-shadow: 0 12px 20px rgba(230, 120, 160, 0.22),
+          0 0 0 rgba(255, 210, 120, 0),
+          0 0 0 rgba(255, 210, 120, 0),
+          inset 0 10px 14px rgba(255, 255, 255, 0.7),
+          inset 0 -12px 16px rgba(180, 80, 120, 0.22);
+      }
+      60% {
+        box-shadow: 0 12px 20px rgba(230, 120, 160, 0.22),
+          0 0 36px rgba(255, 210, 120, 0.85),
+          0 0 64px rgba(255, 210, 120, 0.55),
+          inset 0 10px 14px rgba(255, 255, 255, 0.7),
+          inset 0 -12px 16px rgba(180, 80, 120, 0.22);
+      }
+      100% {
+        box-shadow: 0 12px 20px rgba(230, 120, 160, 0.22),
+          0 0 0 rgba(255, 210, 120, 0),
+          0 0 0 rgba(255, 210, 120, 0),
+          inset 0 10px 14px rgba(255, 255, 255, 0.7),
+          inset 0 -12px 16px rgba(180, 80, 120, 0.22);
+      }
+    }
+
+    @keyframes cheerPulse {
+      0% {
+        filter: brightness(1);
+      }
+      50% {
+        filter: brightness(1.15);
+      }
+      100% {
+        filter: brightness(1);
+      }
+    }
+
 
     .details-toggle-row {
       margin-top: 12px;
@@ -341,15 +510,16 @@
       border-radius: 999px;
       padding: 10px 16px;
       font-size: 0.95rem;
-      background: #f0f0f0;
+      background: linear-gradient(135deg, #fff1f6, #ffd9e6);
+      color: #8a2b4e;
       cursor: pointer;
     }
 
     .details-panel {
       display: none;
       margin-top: 10px;
-      background: #f9f9f9;
-      border-radius: 12px;
+      background: #fff7fb;
+      border-radius: 14px;
       padding: 12px 14px;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
     }
@@ -367,8 +537,8 @@
       display: inline-block;
       padding: 10px 14px;
       border-radius: 10px;
-      background: #f0f0f0;
-      color: #333;
+      background: linear-gradient(135deg, #fff1f6, #ffd9e6);
+      color: #8a2b4e;
       text-decoration: none;
       font-weight: 700;
     }
@@ -530,59 +700,106 @@
     }
 
     @media (max-width: 820px) {
-      body {
-        align-items: flex-start;
-      }
       .app {
-        width: min(100%, 560px);
+        width: 100vw;
       }
       .slot-buttons {
-        gap: 6px;
+        gap: 42px;
+      }
+      .summary-label {
+        font-size: 1rem;
       }
       .summary-value {
-        font-size: 1.1rem;
+        font-size: 1.7rem;
+      }
+      .result-text {
+        font-size: 2.3rem;
+      }
+    }
+
+    @media (min-width: 768px) and (max-width: 1024px) {
+      .first-view {
+        height: 100dvh;
+        overflow: hidden;
+        padding: env(safe-area-inset-top)
+          calc(env(safe-area-inset-right) + 18px) 10px
+          calc(env(safe-area-inset-left) + 18px);
+      }
+      h1 {
+        font-size: 1.3rem;
+        margin: 6px 0 4px;
+      }
+      .description {
+        margin-bottom: 6px;
+      }
+      .window {
+        aspect-ratio: 1.5 / 1;
+      }
+      .summary-item {
+        padding: 6px;
+      }
+      .summary-label {
+        font-size: 1.05rem;
+      }
+      .summary-value {
+        font-size: 1.85rem;
+      }
+      .gacha-button {
+        font-size: 1.7rem;
+      }
+      .result-text {
+        margin-top: 6px;
+        font-size: 2.2rem;
       }
     }
   </style>
 </head>
 <body>
   <div class="app">
-    <h1 id="app-title">ローカルガチャ抽選機</h1>
+    <div class="first-view">
+      <h1 id="app-title">ローカルガチャ抽選機</h1>
 
-    <div class="machine">
+      <div class="machine">
       <div class="window">
         <img id="result-image" src="" alt="ガチャ結果" style="opacity: 0" />
         <div id="placeholder-text" class="placeholder-text">
           ボタンを押してスタート
         </div>
       </div>
-      <div id="ball" class="ball"></div>
+      <div id="confetti" class="confetti" aria-hidden="true"></div>
 
-      <div class="session-summary" aria-label="今回のサマリー">
-        <div class="summary-item">
-          <div class="summary-label">今回の試行</div>
-          <div class="summary-value" id="summary-drawn-count">0回</div>
+        <div class="gacha-controls">
+          <div class="gacha-primary">
+            <div class="slot-buttons" role="group" aria-label="ガチャボタン">
+              <button class="gacha-button" type="button"><span>PUSH!</span></button>
+              <button class="gacha-button" type="button"><span>PUSH!</span></button>
+              <button class="gacha-button" type="button"><span>PUSH!</span></button>
+            </div>
+            <div id="result-text" class="result-text"></div>
+          </div>
         </div>
-        <div class="summary-item">
-          <div class="summary-label">当たり</div>
-          <div class="summary-value" id="summary-win-count">0回</div>
+
+        <div class="session-summary" aria-label="今回のサマリー">
+          <div class="summary-item">
+            <div class="summary-label">今回の試行</div>
+            <div class="summary-value" id="summary-drawn-count">0回</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">当たり</div>
+            <div class="summary-value" id="summary-win-count">0回</div>
+          </div>
         </div>
       </div>
 
-      <div class="gacha-controls">
-        <div class="slot-buttons" role="group" aria-label="ガチャボタン">
-          <button class="gacha-button" type="button">START!</button>
-          <button class="gacha-button" type="button">START!</button>
-          <button class="gacha-button" type="button">START!</button>
-        </div>
-        <div id="result-text" class="result-text"></div>
+      <div class="next-person-row">
+        <button id="next-person-button" class="next-person-button" type="button">
+          次の人へ
+        </button>
+      </div>
+    </div>
 
-        <div class="next-person-row">
-          <button id="next-person-button" class="next-person-button" type="button">
-            次の人へ
-          </button>
-        </div>
-
+    <div class="below-fold">
+      <div class="gacha-controls gacha-secondary">
         <div class="session-inline">
           <label for="input-session-draws">今回の挑戦回数</label>
           <input
@@ -625,11 +842,11 @@
         </div>
         <div id="status-win-breakdown" class="status-breakdown"></div>
       </div>
-    </div>
 
       <div class="settings-link">
         <a href="settings.html">設定ページを開く</a>
       </div>
+    </div>
   </div>
 
   <script>
@@ -948,7 +1165,6 @@
     const nextPersonButton = document.getElementById("next-person-button");
     const nextPartButton = document.getElementById("next-part-button");
     const resultText = document.getElementById("result-text");
-    const ball = document.getElementById("ball");
 
     const statusPart = document.getElementById("status-part");
     const statusRemainingWins = document.getElementById(
@@ -965,6 +1181,7 @@
     const summaryWinCount = document.getElementById("summary-win-count");
     const detailsToggle = document.getElementById("details-toggle");
     const detailsPanel = document.getElementById("details-panel");
+    const confetti = document.getElementById("confetti");
 
     const inputTitle = document.getElementById("input-title");
     const inputTotalTickets = document.getElementById("input-total-tickets");
@@ -996,6 +1213,39 @@
     }
 
     let isSpinning = false;
+
+    function launchConfetti() {
+      if (!confetti) return;
+      confetti.innerHTML = "";
+      const colors = [
+        "#ffd166",
+        "#ff8fab",
+        "#8ecae6",
+        "#cdb4db",
+        "#b9fbc0",
+        "#fcbf49",
+        "#ff6b6b",
+      ];
+      const count = 36;
+      for (let i = 0; i < count; i += 1) {
+        const piece = document.createElement("span");
+        piece.className = "confetti-piece";
+        const x = (Math.random() - 0.5) * 320;
+        const y = 260 + Math.random() * 300;
+        const r = Math.floor(Math.random() * 360);
+        const t = 1.1 + Math.random() * 0.9;
+        piece.style.setProperty("--x", `${x}px`);
+        piece.style.setProperty("--y", `${y}px`);
+        piece.style.setProperty("--r", `${r}deg`);
+        piece.style.setProperty("--t", `${t}s`);
+        piece.style.background = colors[i % colors.length];
+        piece.style.left = `${20 + Math.random() * 60}%`;
+        confetti.appendChild(piece);
+      }
+      setTimeout(() => {
+        if (confetti) confetti.innerHTML = "";
+      }, 2200);
+    }
 
     // ===== 表示更新系 =====
     function getPrizeLabel(prize) {
@@ -1053,8 +1303,10 @@
 
     function clearResultDisplay() {
       resultText.textContent = "";
+      resultText.classList.remove("is-win", "is-lose");
       if (lotteryState.state.drawnCount === 0) {
         placeholderText.style.display = "block";
+        resultImage.style.visibility = "hidden";
         resultImage.style.opacity = 0;
       }
     }
@@ -1086,6 +1338,7 @@
         s.remainingTickets <= 0 || isSpinning || sessionBlocked;
       gachaButtons.forEach((btn) => {
         btn.disabled = gachaDisabled;
+        btn.classList.remove("is-win");
       });
     }
 
@@ -1137,11 +1390,11 @@
       updateStatusDisplay();
       updateButtonsState();
       placeholderText.style.display = "block";
+      resultImage.style.visibility = "hidden";
       resultImage.style.opacity = 0;
       resultText.textContent = "";
+      resultText.classList.remove("is-win", "is-lose");
       resultSub.textContent = "";
-      ball.classList.remove("show");
-      ball.classList.add("hide");
       if (inputSessionDraws) {
         inputSessionDraws.value = "";
       }
@@ -1299,8 +1552,10 @@
 
       if (s.drawnCount === 0) {
         placeholderText.style.display = "block";
+        resultImage.style.visibility = "hidden";
         resultImage.style.opacity = 0;
         resultText.textContent = "";
+        resultText.classList.remove("is-win", "is-lose");
       }
     }
 
@@ -1339,12 +1594,12 @@
       updateButtonsState();
 
       resultText.textContent = "抽選中...";
+      resultText.classList.remove("is-win", "is-lose");
       placeholderText.style.display = "none";
+      gachaButtons.forEach((btn) => btn.classList.remove("is-win"));
 
       playSafe(startSound, 1000);
 
-      ball.classList.remove("hide");
-      ball.classList.add("show");
 
       let tempKeys = getEnabledPrizeKeys();
       if (tempKeys.length === 0) {
@@ -1355,9 +1610,10 @@
         const key = tempKeys[Math.floor(Math.random() * tempKeys.length)];
         const defPath = key.toLowerCase() + ".png";
         resultImage.src = getImageSrc(key, defPath);
+        resultImage.style.visibility = "visible";
         resultImage.style.opacity = 0.5;
         resultImage.style.transform = "scale(0.95)";
-      }, 80);
+      }, 60);
 
       setTimeout(() => {
         clearInterval(spinInterval);
@@ -1366,15 +1622,13 @@
         if (!drawResult) {
           isSpinning = false;
           updateButtonsState();
-          ball.classList.remove("show");
-          ball.classList.add("hide");
           return;
         }
 
         const { outcome, prizeKey } = drawResult;
         const finalImageSrc = getFinalImageForOutcome(outcome, prizeKey);
         resultImage.src = finalImageSrc;
-
+        resultImage.style.visibility = "visible";
         resultImage.style.opacity = 1;
         resultImage.style.transform = "scale(1.02)";
         setTimeout(() => {
@@ -1384,20 +1638,20 @@
         const c2 = lotteryState.config;
         if (outcome === "win") {
           resultText.textContent = c2.winText || "当たり！";
+          resultText.classList.add("is-win");
           playSafe(resultWinSound);
+          launchConfetti();
+          gachaButtons.forEach((btn) => btn.classList.add("is-win"));
         } else {
           resultText.textContent = "ハズレ…";
+          resultText.classList.add("is-lose");
           playSafe(resultLoseSound);
         }
 
-        setTimeout(() => {
-          ball.classList.remove("show");
-          ball.classList.add("hide");
-        }, 600);
 
         isSpinning = false;
         updateButtonsState();
-      }, 1000);
+      }, 650);
     }
 
     gachaButtons.forEach((btn) => {
