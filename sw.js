@@ -1,6 +1,7 @@
-const CACHE_NAME = "gacha-pwa-v1";
+const CACHE_NAME = "gacha-pwa-v2";
 const ASSETS = [
   "index.html",
+  "settings.html",
   "manifest.webmanifest",
   "sw.js",
   "a.png",
@@ -29,6 +30,7 @@ const ASSETS = [
 const toUrl = (path) => new URL(path, self.location).toString();
 const ASSET_URLS = ASSETS.map(toUrl);
 const INDEX_URL = toUrl("index.html");
+const SETTINGS_URL = toUrl("settings.html");
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -65,6 +67,12 @@ self.addEventListener("fetch", (event) => {
   if (request.headers.has("range")) return;
 
   if (request.mode === "navigate") {
+    if (url.pathname.endsWith("/settings.html")) {
+      event.respondWith(
+        caches.match(SETTINGS_URL).then((cached) => cached || fetch(request))
+      );
+      return;
+    }
     event.respondWith(
       caches.match(INDEX_URL).then((cached) => cached || fetch(request))
     );
