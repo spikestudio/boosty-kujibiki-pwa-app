@@ -7,7 +7,7 @@
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
   />
   <link rel="manifest" href="manifest.webmanifest" />
-  <meta name="theme-color" content="#ff7a2b" />
+  <meta name="theme-color" content="#ff9999" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="ガチャ抽選" />
@@ -26,10 +26,24 @@
       overflow-x: hidden;
     }
 
+    :root {
+      --salmon: #ff8080;
+      --salmon-deep: #cc5a5a;
+      --salmon-dark: #b84b4b;
+      --salmon-accent: #ff9b9b;
+      --salmon-light: #ffd1d1;
+      --salmon-lighter: #ffe8e8;
+    }
+
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
         sans-serif;
-      background: radial-gradient(circle at top, #fff7fb 0%, #fff1f6 45%, #fff 100%);
+      background: radial-gradient(
+        circle at top,
+        var(--salmon-lighter) 0%,
+        var(--salmon-light) 45%,
+        #fff 100%
+      );
       color: #333;
       min-height: 100dvh;
       padding: 0;
@@ -49,7 +63,7 @@
         calc(env(safe-area-inset-left) + 12px);
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
 
     .below-fold {
@@ -59,8 +73,8 @@
 
     h1 {
       font-size: 1.5rem;
-      margin: 8px 0 6px 0;
-      color: #c23b6a;
+      margin: 6px 0 4px 0;
+      color: var(--salmon-deep);
       letter-spacing: 0.3px;
       text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
     }
@@ -74,8 +88,8 @@
     .machine {
       background: #ffffff;
       border-radius: 18px;
-      padding: 12px;
-      box-shadow: 0 10px 24px rgba(220, 120, 160, 0.15);
+      padding: 10px;
+      box-shadow: 0 10px 24px rgba(255, 153, 153, 0.25);
       position: relative;
       overflow: hidden;
     }
@@ -83,9 +97,13 @@
     .window {
       width: 100%;
       aspect-ratio: 1.5 / 1;
-      background: linear-gradient(135deg, #fff9fd, #ffeaf2);
+      background: linear-gradient(
+        135deg,
+        var(--salmon-lighter),
+        var(--salmon-light)
+      );
       border-radius: 16px;
-      border: 2px solid #ffd5e3;
+      border: 2px solid var(--salmon-accent);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -142,11 +160,11 @@
     .placeholder-text {
       position: absolute;
       font-size: 0.9rem;
-      color: #c05a7a;
+      color: var(--salmon-dark);
       padding: 4px 10px;
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.9);
-      border: 1px dashed #f3b9cd;
+      border: 1px dashed var(--salmon-accent);
     }
 
 
@@ -154,28 +172,32 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 8px;
-      margin: 44px 0 16px;
+      margin: 12px 0 8px;
     }
 
     .summary-item {
-      background: linear-gradient(135deg, #fff6fb, #ffe9f2);
+      background: linear-gradient(
+        135deg,
+        var(--salmon-lighter),
+        var(--salmon-light)
+      );
       border-radius: 12px;
       padding: 8px;
       text-align: left;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7),
-        0 6px 12px rgba(210, 110, 150, 0.12);
+        0 6px 12px rgba(255, 153, 153, 0.2);
     }
 
     .summary-label {
-      font-size: 1.05rem;
-      color: #b55474;
+      font-size: 1rem;
+      color: var(--salmon-dark);
       margin-bottom: 2px;
     }
 
     .summary-value {
-      font-size: 1.85rem;
+      font-size: 1.7rem;
       font-weight: 800;
-      color: #c23b6a;
+      color: var(--salmon-deep);
     }
 
     .status-panel {
@@ -211,14 +233,14 @@
     .gacha-controls {
       display: flex;
       flex-direction: column;
-      gap: 90px;
-      margin-top: 40px;
+      gap: 28px;
+      margin-top: 14px;
     }
 
     .gacha-primary {
       display: flex;
       flex-direction: column;
-      gap: 48px;
+      gap: 22px;
     }
 
     .gacha-secondary {
@@ -230,7 +252,7 @@
     .slot-buttons {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 60px;
+      gap: 22px;
       align-items: center;
     }
 
@@ -239,26 +261,26 @@
       aspect-ratio: 1 / 1;
       padding: 0;
       border-radius: 999px;
-      border: 3px solid #f6a1be;
-      font-size: 2.1rem;
+      border: 3px solid var(--salmon-accent);
+      font-size: 1.95rem;
       font-weight: 900;
       letter-spacing: 0.6px;
       font-family: "Avenir Next Rounded", "Hiragino Maru Gothic ProN",
         "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
       background: radial-gradient(
         circle at 30% 28%,
-        #fff4f8 0%,
-        #ffd3e2 35%,
-        #f8a6c2 70%,
-        #f28aad 100%
+        var(--salmon-lighter) 0%,
+        var(--salmon-light) 35%,
+        var(--salmon-accent) 70%,
+        var(--salmon-deep) 100%
       );
       color: #ffffff;
       text-shadow: 0 2px 0 rgba(255, 255, 255, 0.2),
-        0 4px 10px rgba(160, 50, 90, 0.45);
-      box-shadow: 0 12px 20px rgba(230, 120, 160, 0.22),
-        0 10px 18px rgba(200, 90, 130, 0.16),
+        0 4px 10px rgba(200, 90, 90, 0.45);
+      box-shadow: 0 12px 20px rgba(255, 153, 153, 0.28),
+        0 10px 18px rgba(220, 110, 110, 0.22),
         inset 0 10px 14px rgba(255, 255, 255, 0.7),
-        inset 0 -12px 16px rgba(180, 80, 120, 0.22);
+        inset 0 -12px 16px rgba(200, 90, 90, 0.25);
       cursor: pointer;
       transition: transform 0.08s ease-out, box-shadow 0.08s ease-out,
         opacity 0.2s;
@@ -305,10 +327,10 @@
 
     .gacha-button:active {
       transform: translateY(2px) scale(0.98);
-      box-shadow: 0 8px 14px rgba(230, 120, 160, 0.2),
-        0 3px 0 #c86b90,
+      box-shadow: 0 8px 14px rgba(255, 153, 153, 0.24),
+        0 3px 0 var(--salmon-dark),
         inset 0 6px 10px rgba(255, 255, 255, 0.4),
-        inset 0 -10px 14px rgba(180, 90, 120, 0.28);
+        inset 0 -10px 14px rgba(200, 90, 90, 0.3);
     }
 
     .gacha-button[disabled] {
@@ -319,7 +341,7 @@
 
     .next-person-row {
       margin-top: auto;
-      padding-top: 12px;
+      padding-top: 8px;
     }
 
     .next-person-button {
@@ -330,10 +352,14 @@
       font-size: 0.95rem;
       font-weight: 800;
       letter-spacing: 0.2px;
-      background: linear-gradient(135deg, #ffd5e3, #f7a9c4);
-      color: #8a2b4e;
+      background: linear-gradient(
+        135deg,
+        var(--salmon-light),
+        var(--salmon-accent)
+      );
+      color: #7a2b2b;
       text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
-      box-shadow: 0 6px 12px rgba(230, 120, 160, 0.2),
+      box-shadow: 0 6px 12px rgba(255, 153, 153, 0.24),
         inset 0 1px 0 rgba(255, 255, 255, 0.75);
       cursor: pointer;
     }
@@ -345,15 +371,15 @@
       gap: 8px;
       padding: 8px 10px;
       border-radius: 14px;
-      background: #fff6f9;
+      background: var(--salmon-lighter);
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6),
-        0 4px 10px rgba(230, 120, 160, 0.1);
+        0 4px 10px rgba(255, 153, 153, 0.14);
       font-size: 0.9rem;
     }
 
     .session-inline label {
       font-weight: 700;
-      color: #c23b6a;
+      color: var(--salmon-deep);
       white-space: nowrap;
     }
 
@@ -362,19 +388,23 @@
       font-size: 0.95rem;
       padding: 6px 8px;
       border-radius: 8px;
-      border: 1px solid #f0c2d3;
+      border: 1px solid var(--salmon-accent);
     }
 
     .session-inline button {
       padding: 8px 12px;
       border-radius: 10px;
       border: none;
-      background: linear-gradient(135deg, #ffd5e3, #f5a7c1);
-      color: #8a2b4e;
+      background: linear-gradient(
+        135deg,
+        var(--salmon-light),
+        var(--salmon-accent)
+      );
+      color: #7a2b2b;
       text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 3px 8px rgba(230, 120, 160, 0.2);
+      box-shadow: 0 3px 8px rgba(255, 153, 153, 0.24);
     }
 
     .sub-buttons {
@@ -390,8 +420,12 @@
       border-radius: 999px;
       border: none;
       font-size: 0.75rem;
-      background: linear-gradient(135deg, #fff1f6, #ffd9e6);
-      color: #8a2b4e;
+      background: linear-gradient(
+        135deg,
+        var(--salmon-lighter),
+        var(--salmon-light)
+      );
+      color: #7a2b2b;
       cursor: pointer;
     }
 
@@ -401,16 +435,16 @@
     }
 
     .result-text {
-      margin: 78px auto 0;
-      font-size: 2.7rem;
+      margin: 16px auto 0;
+      font-size: 2.35rem;
       font-weight: 900;
       min-height: 1.8em;
       padding: 6px 14px;
       border-radius: 999px;
       background: transparent;
-      color: #c2185b;
+      color: var(--salmon-deep);
       text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7),
-        0 3px 10px rgba(200, 90, 130, 0.2);
+        0 3px 10px rgba(200, 90, 90, 0.25);
       width: fit-content;
     }
 
@@ -510,15 +544,19 @@
       border-radius: 999px;
       padding: 10px 16px;
       font-size: 0.95rem;
-      background: linear-gradient(135deg, #fff1f6, #ffd9e6);
-      color: #8a2b4e;
+      background: linear-gradient(
+        135deg,
+        var(--salmon-lighter),
+        var(--salmon-light)
+      );
+      color: #7a2b2b;
       cursor: pointer;
     }
 
     .details-panel {
       display: none;
       margin-top: 10px;
-      background: #fff7fb;
+      background: var(--salmon-lighter);
       border-radius: 14px;
       padding: 12px 14px;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
@@ -537,8 +575,12 @@
       display: inline-block;
       padding: 10px 14px;
       border-radius: 10px;
-      background: linear-gradient(135deg, #fff1f6, #ffd9e6);
-      color: #8a2b4e;
+      background: linear-gradient(
+        135deg,
+        var(--salmon-lighter),
+        var(--salmon-light)
+      );
+      color: #7a2b2b;
       text-decoration: none;
       font-weight: 700;
     }
@@ -613,7 +655,7 @@
       padding: 6px 10px;
       border-radius: 999px;
       border: none;
-      background: #1976d2;
+      background: var(--salmon);
       color: #fff;
       font-size: 0.8rem;
       cursor: pointer;
@@ -704,7 +746,7 @@
         width: 100vw;
       }
       .slot-buttons {
-        gap: 42px;
+        gap: 24px;
       }
       .summary-label {
         font-size: 1rem;
@@ -713,7 +755,7 @@
         font-size: 1.7rem;
       }
       .result-text {
-        font-size: 2.3rem;
+        font-size: 2.2rem;
       }
     }
 
@@ -721,35 +763,51 @@
       .first-view {
         height: 100dvh;
         overflow: hidden;
-        padding: env(safe-area-inset-top)
-          calc(env(safe-area-inset-right) + 18px) 10px
-          calc(env(safe-area-inset-left) + 18px);
+        padding: calc(env(safe-area-inset-top) + 4px)
+          calc(env(safe-area-inset-right) + 14px) 8px
+          calc(env(safe-area-inset-left) + 14px);
       }
       h1 {
-        font-size: 1.3rem;
-        margin: 6px 0 4px;
+        font-size: 1.22rem;
+        margin: 4px 0 2px;
       }
       .description {
-        margin-bottom: 6px;
+        margin-bottom: 4px;
+      }
+      .machine {
+        padding: 8px;
       }
       .window {
-        aspect-ratio: 1.5 / 1;
+        aspect-ratio: 1.55 / 1;
+      }
+      .gacha-controls {
+        margin-top: 10px;
+        gap: 24px;
+      }
+      .gacha-primary {
+        gap: 18px;
+      }
+      .slot-buttons {
+        gap: 18px;
       }
       .summary-item {
         padding: 6px;
       }
       .summary-label {
-        font-size: 1.05rem;
+        font-size: 0.98rem;
       }
       .summary-value {
-        font-size: 1.85rem;
+        font-size: 1.6rem;
       }
       .gacha-button {
-        font-size: 1.7rem;
+        font-size: 1.55rem;
       }
       .result-text {
-        margin-top: 6px;
-        font-size: 2.2rem;
+        margin-top: 8px;
+        font-size: 2rem;
+      }
+      .next-person-button {
+        padding: 10px;
       }
     }
   </style>
@@ -781,7 +839,7 @@
 
         <div class="session-summary" aria-label="今回のサマリー">
           <div class="summary-item">
-            <div class="summary-label">今回の試行</div>
+            <div class="summary-label">抽選回数</div>
             <div class="summary-value" id="summary-drawn-count">0回</div>
           </div>
           <div class="summary-item">
@@ -876,6 +934,9 @@
 
     function loadImageSources() {
       try {
+        try {
+          localStorage.removeItem(IMAGE_STORAGE_KEY);
+        } catch (e) {}
         const raw = localStorage.getItem(IMAGE_STORAGE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
@@ -909,6 +970,9 @@
 
     function loadSoundSources() {
       try {
+        try {
+          localStorage.removeItem(SOUND_STORAGE_KEY);
+        } catch (e) {}
         const raw = localStorage.getItem(SOUND_STORAGE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
@@ -1009,17 +1073,22 @@
     }
 
     // ===== 抽選ロジック用状態管理 =====
-    const LOTTERY_STORAGE_KEY = "gachaLotteryStateV3";
+    const LOTTERY_STORAGE_KEY = "gachaLotteryStateV5";
+    const LEGACY_LOTTERY_KEYS = [
+      "gachaLotteryStateV4",
+      "gachaLotteryStateV3",
+      "gachaLotteryStateV2",
+    ];
 
     let lotteryState = {
-      version: 3,
+      version: 5,
       currentPart: 1,
       config: {
-        totalTickets: 100,
+        totalTickets: 330,
         totalWins: 10,
-        title: "ローカルガチャ抽選機",
-        winText: "大当たり！",
-        maxSessionDraw: 3, // ★ 初期は 3 回挑戦できる
+        title: "Boosty Winter Party 2026",
+        winText: "おめでとうございます！",
+        maxSessionDraw: null, // ★ 初期は上限なし
       },
       prizes: [],
       state: {
@@ -1030,13 +1099,18 @@
         remainingTickets: 100,
         remainingWins: 10,
         prizeRemainingWins: {},
-        sessionRemainingDraws: 3, // ★ 初期は 3 回
+        sessionRemainingDraws: null, // ★ 初期は上限なし
       },
       lastDraw: null, // {outcome, prizeKey}
     };
 
     function loadLotteryState() {
       try {
+        LEGACY_LOTTERY_KEYS.forEach((key) => {
+          try {
+            localStorage.removeItem(key);
+          } catch (e) {}
+        });
         const raw = localStorage.getItem(LOTTERY_STORAGE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
@@ -1062,14 +1136,15 @@
 
       const existingKeys = new Set(lotteryState.prizes.map((p) => p.key));
 
-      // 初回は A だけ当たり10本、他はハズレとして追加
+      // 初回は A だけ当たり10本、Bは有効だが当たりなし、C〜Eは無効
       PRIZE_KEYS.forEach((key) => {
         if (!existingKeys.has(key)) {
           lotteryState.prizes.push({
             key,
-            label: key + "賞",
+            label:
+              key === "A" ? "当選" : key === "B" ? "落選" : key + "賞",
             defaultPath: key.toLowerCase() + ".png",
-            enabled: true,
+            enabled: key === "A" || key === "B",
             isWin: key === "A",
             winCountTotal: key === "A" ? 10 : 0,
           });
@@ -1090,19 +1165,22 @@
         lotteryState.config.totalTickets <= 0
       ) {
         lotteryState.config = {
-          totalTickets: Math.max(sumWins || 100, 1),
+          totalTickets: Math.max(sumWins || 330, 1),
           totalWins: sumWins || 10,
-          title: "ローカルガチャ抽選機",
-          winText: "大当たり！",
-          maxSessionDraw: 3, // ★ 初期挑戦回数
+          title: "Boosty Winter Party 2026",
+          winText: "おめでとうございます！",
+          maxSessionDraw: null, // ★ 初期は上限なし
         };
       } else {
         lotteryState.config.totalWins = sumWins;
         if (!("maxSessionDraw" in lotteryState.config)) {
-          lotteryState.config.maxSessionDraw = 3;
+          lotteryState.config.maxSessionDraw = null;
         }
         if (!("title" in lotteryState.config)) {
-          lotteryState.config.title = "ローカルガチャ抽選機";
+          lotteryState.config.title = "Boosty Winter Party 2026";
+        }
+        if (!("winText" in lotteryState.config)) {
+          lotteryState.config.winText = "おめでとうございます！";
         }
       }
 
@@ -1267,7 +1345,7 @@
       summaryWinCount.textContent = `${s.personWinCount || 0} 回`;
 
       if (c.maxSessionDraw == null) {
-        statusSessionDraws.textContent = "無制限";
+        statusSessionDraws.textContent = "未設定";
       } else {
         const rem = s.sessionRemainingDraws != null ? s.sessionRemainingDraws : 0;
         statusSessionDraws.textContent = `${rem} 回 / ${c.maxSessionDraw} 回`;
@@ -1329,10 +1407,12 @@
     function updateButtonsState() {
       const s = lotteryState.state;
       const c = lotteryState.config;
+      const sessionUnset = c.maxSessionDraw == null || s.sessionRemainingDraws == null;
       const sessionBlocked =
-        c.maxSessionDraw != null &&
-        s.sessionRemainingDraws != null &&
-        s.sessionRemainingDraws <= 0;
+        sessionUnset ||
+        (c.maxSessionDraw != null &&
+          s.sessionRemainingDraws != null &&
+          s.sessionRemainingDraws <= 0);
       undoButton.disabled = !lotteryState.lastDraw;
       const gachaDisabled =
         s.remainingTickets <= 0 || isSpinning || sessionBlocked;
@@ -1374,6 +1454,7 @@
       saveLotteryState();
       updateStatusDisplay();
       updateButtonsState();
+      updateConfigInputs();
       clearResultDisplay();
     }
 
@@ -1575,6 +1656,10 @@
       return prizes.filter((p) => p.enabled).map((p) => p.key);
     }
 
+    const SPIN_INTERVAL_MS = 50;
+    const SPIN_DURATION_MS = 450;
+    const START_SOUND_LIMIT_MS = 500;
+
     function spinGacha() {
       const s = lotteryState.state;
       const c = lotteryState.config;
@@ -1585,7 +1670,11 @@
 
       if (isSpinning || s.remainingTickets <= 0 || sessionBlocked) {
         if (sessionBlocked) {
-          resultText.textContent = "今回の挑戦回数は終了しました。";
+          if (c.maxSessionDraw == null || s.sessionRemainingDraws == null) {
+            resultText.textContent = "挑戦回数をセットしてください。";
+          } else {
+            resultText.textContent = "今回の挑戦回数は終了しました。";
+          }
         }
         return;
       }
@@ -1598,7 +1687,7 @@
       placeholderText.style.display = "none";
       gachaButtons.forEach((btn) => btn.classList.remove("is-win"));
 
-      playSafe(startSound, 1000);
+      playSafe(startSound, START_SOUND_LIMIT_MS);
 
 
       let tempKeys = getEnabledPrizeKeys();
@@ -1613,7 +1702,7 @@
         resultImage.style.visibility = "visible";
         resultImage.style.opacity = 0.5;
         resultImage.style.transform = "scale(0.95)";
-      }, 60);
+      }, SPIN_INTERVAL_MS);
 
       setTimeout(() => {
         clearInterval(spinInterval);
@@ -1651,7 +1740,7 @@
 
         isSpinning = false;
         updateButtonsState();
-      }, 650);
+      }, SPIN_DURATION_MS);
     }
 
     gachaButtons.forEach((btn) => {
@@ -1762,8 +1851,8 @@
     applySessionButton.addEventListener("click", () => {
       const v = inputSessionDraws.value.trim();
       if (v === "") {
-        lotteryState.config.maxSessionDraw = null;
-        lotteryState.state.sessionRemainingDraws = null;
+        alert("挑戦回数を入力してセットしてください。");
+        return;
       } else {
         const num = parseInt(v, 10);
         if (isNaN(num) || num <= 0) {

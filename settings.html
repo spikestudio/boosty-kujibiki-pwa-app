@@ -7,7 +7,7 @@
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
   />
   <link rel="manifest" href="manifest.webmanifest" />
-  <meta name="theme-color" content="#ff7a2b" />
+  <meta name="theme-color" content="#ff9999" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="ガチャ抽選設定" />
@@ -19,10 +19,24 @@
       margin: 0;
       padding: 0;
     }
+    :root {
+      --salmon: #ff8080;
+      --salmon-deep: #cc5a5a;
+      --salmon-dark: #b84b4b;
+      --salmon-accent: #ff9b9b;
+      --salmon-light: #ffd1d1;
+      --salmon-lighter: #ffe8e8;
+    }
+
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
         sans-serif;
-      background: #f4f4f4;
+      background: radial-gradient(
+        circle at top,
+        var(--salmon-lighter) 0%,
+        var(--salmon-light) 50%,
+        #fff 100%
+      );
       color: #333;
       display: flex;
       justify-content: center;
@@ -37,12 +51,13 @@
       font-size: 1.6rem;
       margin-bottom: 10px;
       text-align: center;
+      color: var(--salmon-deep);
     }
     .settings {
       background: #fff;
       border-radius: 12px;
       padding: 12px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 14px rgba(255, 153, 153, 0.18);
       text-align: left;
       font-size: 0.9rem;
     }
@@ -51,9 +66,13 @@
       margin-bottom: 12px;
       padding: 8px 12px;
       border-radius: 10px;
-      background: #f0f0f0;
+      background: linear-gradient(
+        135deg,
+        var(--salmon-lighter),
+        var(--salmon-light)
+      );
       text-decoration: none;
-      color: #333;
+      color: #7a2b2b;
       font-weight: 700;
     }
     h2 {
@@ -70,6 +89,7 @@
       margin-bottom: 4px;
       font-size: 0.95rem;
       font-weight: 700;
+      color: var(--salmon-dark);
     }
     .note {
       color: #777;
@@ -95,7 +115,7 @@
       font-size: 0.95rem;
       padding: 6px 8px;
       border-radius: 6px;
-      border: 1px solid #ccc;
+      border: 1px solid var(--salmon-accent);
       min-width: 0;
     }
     .settings-row button.settings-main-btn {
@@ -103,7 +123,7 @@
       padding: 8px 12px;
       border-radius: 999px;
       border: none;
-      background: #1976d2;
+      background: var(--salmon);
       color: #fff;
       font-size: 0.95rem;
       cursor: pointer;
@@ -124,7 +144,7 @@
       width: 28px;
       height: 28px;
       border-radius: 999px;
-      background: #eee;
+      background: var(--salmon-light);
       font-size: 0.9rem;
       font-weight: 700;
       flex-shrink: 0;
@@ -134,7 +154,7 @@
       height: 36px;
       border-radius: 4px;
       object-fit: cover;
-      border: 1px solid #ddd;
+      border: 1px solid var(--salmon-accent);
       flex-shrink: 0;
     }
     .small-label {
@@ -147,7 +167,7 @@
       font-size: 0.9rem;
       padding: 5px 6px;
       border-radius: 6px;
-      border: 1px solid #ccc;
+      border: 1px solid var(--salmon-accent);
     }
     .prize-win-count {
       width: 70px;
@@ -169,7 +189,7 @@
       border-radius: 999px;
       padding: 5px 10px;
       font-size: 0.85rem;
-      background: #eee;
+      background: var(--salmon-light);
       cursor: pointer;
       flex-shrink: 0;
     }
@@ -499,16 +519,21 @@
 
     loadSoundSources();
 
-    const LOTTERY_STORAGE_KEY = "gachaLotteryStateV3";
+    const LOTTERY_STORAGE_KEY = "gachaLotteryStateV5";
+    const LEGACY_LOTTERY_KEYS = [
+      "gachaLotteryStateV4",
+      "gachaLotteryStateV3",
+      "gachaLotteryStateV2",
+    ];
     let lotteryState = {
-      version: 3,
+      version: 5,
       currentPart: 1,
       config: {
-        totalTickets: 100,
+        totalTickets: 330,
         totalWins: 10,
-        title: "ローカルガチャ抽選機",
-        winText: "大当たり！",
-        maxSessionDraw: 3,
+        title: "Boosty Winter Party 2026",
+        winText: "おめでとうございます！",
+        maxSessionDraw: null,
       },
       prizes: [],
       state: {
@@ -516,16 +541,21 @@
         winCount: 0,
         personDrawnCount: 0,
         personWinCount: 0,
-        remainingTickets: 100,
+        remainingTickets: 330,
         remainingWins: 10,
         prizeRemainingWins: {},
-        sessionRemainingDraws: 3,
+        sessionRemainingDraws: null,
       },
       lastDraw: null,
     };
 
     function loadLotteryState() {
       try {
+        LEGACY_LOTTERY_KEYS.forEach((key) => {
+          try {
+            localStorage.removeItem(key);
+          } catch (e) {}
+        });
         const raw = localStorage.getItem(LOTTERY_STORAGE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
@@ -547,13 +577,15 @@
         lotteryState.prizes = [];
       }
       const existingKeys = new Set(lotteryState.prizes.map((p) => p.key));
+      // 初回は A だけ当たり10本、Bは有効だが当たりなし、C〜Eは無効
       PRIZE_KEYS.forEach((key) => {
         if (!existingKeys.has(key)) {
           lotteryState.prizes.push({
             key,
-            label: key + "賞",
+            label:
+              key === "A" ? "当選" : key === "B" ? "落選" : key + "賞",
             defaultPath: key.toLowerCase() + ".png",
-            enabled: true,
+            enabled: key === "A" || key === "B",
             isWin: key === "A",
             winCountTotal: key === "A" ? 10 : 0,
           });
@@ -573,19 +605,22 @@
         lotteryState.config.totalTickets <= 0
       ) {
         lotteryState.config = {
-          totalTickets: Math.max(sumWins || 100, 1),
+          totalTickets: Math.max(sumWins || 330, 1),
           totalWins: sumWins || 10,
-          title: "ローカルガチャ抽選機",
-          winText: "大当たり！",
-          maxSessionDraw: 3,
+          title: "Boosty Winter Party 2026",
+          winText: "おめでとうございます！",
+          maxSessionDraw: null,
         };
       } else {
         lotteryState.config.totalWins = sumWins;
         if (!("maxSessionDraw" in lotteryState.config)) {
-          lotteryState.config.maxSessionDraw = 3;
+          lotteryState.config.maxSessionDraw = null;
         }
         if (!("title" in lotteryState.config)) {
-          lotteryState.config.title = "ローカルガチャ抽選機";
+          lotteryState.config.title = "Boosty Winter Party 2026";
+        }
+        if (!("winText" in lotteryState.config)) {
+          lotteryState.config.winText = "おめでとうございます！";
         }
       }
 
@@ -664,7 +699,8 @@
 
     function updateConfigInputs() {
       const c = lotteryState.config;
-      if (inputTitle) inputTitle.value = c.title || "ローカルガチャ抽選機";
+      if (inputTitle)
+        inputTitle.value = c.title || "Boosty Winter Party 2026";
       if (inputTotalTickets) inputTotalTickets.value = c.totalTickets;
       if (inputTotalWins) inputTotalWins.value = c.totalWins;
       if (inputWinText) inputWinText.value = c.winText || "";
