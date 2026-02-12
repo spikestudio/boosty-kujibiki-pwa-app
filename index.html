@@ -1004,6 +1004,7 @@
       const audio = new Audio(src);
       audio.preload = "auto";
       audio.playsInline = true;
+      audio.load();
       return audio;
     }
 
@@ -1014,17 +1015,46 @@
     // Unlock audio on iOS/WKWebView which blocks playback until a user gesture.
     const audioUnlockEvents = ["pointerdown", "touchstart", "click", "keydown"];
     let audioUnlocked = false;
+    let audioCtx = null;
+    let resultWinBuffer = null;
+    let resultLoseBuffer = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) audioCtx = new AudioCtx();
+      }
+      return audioCtx;
+    }
+
+    async function loadAudioBuffer(src) {
+      const ctx = getAudioContext();
+      if (!ctx) return null;
+      try {
+        const res = await fetch(src, { cache: "no-store" });
+        const arrayBuffer = await res.arrayBuffer();
+        return await ctx.decodeAudioData(arrayBuffer);
+      } catch (e) {
+        console.warn("サウンドの事前読み込みに失敗しました:", e);
+        return null;
+      }
+    }
+
+    async function ensureResultBuffersLoaded() {
+      if (resultWinBuffer && resultLoseBuffer) return;
+      resultWinBuffer =
+        resultWinBuffer || (await loadAudioBuffer(getSoundSrc("resultWin", "atari.mp3")));
+      resultLoseBuffer =
+        resultLoseBuffer || (await loadAudioBuffer(getSoundSrc("resultLose", "hazure.mp3")));
+    }
 
     function unlockAudio() {
       if (audioUnlocked) return;
       audioUnlocked = true;
 
       try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (AudioCtx) {
-          const ctx = new AudioCtx();
-          ctx.resume().catch(() => {});
-        }
+        const ctx = getAudioContext();
+        if (ctx) ctx.resume().catch(() => {});
       } catch (e) {}
 
       [startSound, resultWinSound, resultLoseSound].forEach((audio) => {
@@ -1136,6 +1166,45 @@
         }
       } catch (e) {
         // ignore
+      }
+    }
+
+    async function playResultBuffer(buffer) {
+      const ctx = getAudioContext();
+      if (!ctx || !buffer) return false;
+      try {
+        if (ctx.state === "suspended") {
+          await ctx.resume();
+        }
+        const source = ctx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(ctx.destination);
+        source.start(0);
+        return true;
+      } catch (e) {
+        console.warn("WebAudio再生に失敗しました:", e);
+        return false;
+      }
+    }
+
+    async function playResultSound(type) {
+      unlockAudio();
+      await ensureResultBuffersLoaded();
+      const buffer = type === "win" ? resultWinBuffer : resultLoseBuffer;
+      const played = await playResultBuffer(buffer);
+      if (!played) {
+        const fallback = type === "win" ? resultWinSound : resultLoseSound;
+        await playSafe(fallback);
+      }
+      if (!played) {
+        try {
+          const fallbackSrc =
+            type === "win"
+              ? getSoundSrc("resultWin", "atari.mp3")
+              : getSoundSrc("resultLose", "hazure.mp3");
+          const tempAudio = createAudio(fallbackSrc);
+          await playSafe(tempAudio);
+        } catch (e) {}
       }
     }
 
@@ -1697,6 +1766,8 @@
     const START_SOUND_LIMIT_MS = 500;
 
     function spinGacha() {
+      unlockAudio();
+      ensureResultBuffersLoaded();
       ensureUnlimitedWhenUnset();
       const s = lotteryState.state;
       const sessionLimited = isSessionLimited();
@@ -1746,13 +1817,13 @@
         if (outcome === "win") {
           resultText.textContent = c2.winText || "当たり！";
           resultText.classList.add("is-win");
-          playSafe(resultWinSound);
+          playResultSound("win");
           launchConfetti();
           gachaButtons.forEach((btn) => btn.classList.add("is-win"));
         } else {
           resultText.textContent = "ハズレ…";
           resultText.classList.add("is-lose");
-          playSafe(resultLoseSound);
+          playResultSound("lose");
         }
 
 
