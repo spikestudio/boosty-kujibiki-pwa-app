@@ -433,6 +433,11 @@
         <input type="file" accept="audio/*" />
         <button type="button" class="sound-clear-btn">解除</button>
       </div>
+      <div class="settings-row">
+        <label for="input-start-sound-muted">回転音ミュート</label>
+        <input id="input-start-sound-muted" type="checkbox" />
+        <span class="small-label">ONでガラガラ音を再生しません</span>
+      </div>
 
       <div class="settings-footer">
         ※ ブラウザのストレージを削除すると、抽選状態・画像・サウンド設定は再度設定が必要になります。
@@ -535,6 +540,7 @@
         title: "Boosty Winter Party 2026",
         winText: "おめでとうございます！",
         maxSessionDraw: null,
+        startSoundMuted: true,
       },
       prizes: [],
       state: {
@@ -638,6 +644,9 @@
         if (!("winText" in lotteryState.config)) {
           lotteryState.config.winText = "おめでとうございます！";
         }
+        if (!("startSoundMuted" in lotteryState.config)) {
+          lotteryState.config.startSoundMuted = true;
+        }
       }
 
       if (!lotteryState.state || typeof lotteryState.state !== "object") {
@@ -696,6 +705,9 @@
     const inputTotalWins = document.getElementById("input-total-wins");
     const inputWinText = document.getElementById("input-win-text");
     const applyConfigButton = document.getElementById("apply-config-button");
+    const inputStartSoundMuted = document.getElementById(
+      "input-start-sound-muted"
+    );
 
     try {
       const href = location.href || "";
@@ -720,6 +732,8 @@
       if (inputTotalTickets) inputTotalTickets.value = c.totalTickets;
       if (inputTotalWins) inputTotalWins.value = c.totalWins;
       if (inputWinText) inputWinText.value = c.winText || "";
+      if (inputStartSoundMuted)
+        inputStartSoundMuted.checked = c.startSoundMuted !== false;
     }
 
     function resetStateForCurrentPart() {
@@ -922,6 +936,9 @@
         lotteryState.config.totalWins = totalWinsInput;
         lotteryState.config.title = titleText;
         lotteryState.config.winText = winText;
+        if (inputStartSoundMuted) {
+          lotteryState.config.startSoundMuted = inputStartSoundMuted.checked;
+        }
 
         resetStateForCurrentPart();
         saveLotteryState();
