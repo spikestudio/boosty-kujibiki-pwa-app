@@ -20,12 +20,12 @@
       padding: 0;
     }
     :root {
-      --salmon: #ff8080;
-      --salmon-deep: #cc5a5a;
-      --salmon-dark: #b84b4b;
-      --salmon-accent: #ff9b9b;
-      --salmon-light: #ffd1d1;
-      --salmon-lighter: #ffe8e8;
+      --salmon: #ff9999;
+      --salmon-deep: #d86868;
+      --salmon-dark: #c85a5a;
+      --salmon-accent: #ffb3b3;
+      --salmon-light: #ffe1e1;
+      --salmon-lighter: #fff2f2;
     }
 
     body {
@@ -519,14 +519,15 @@
 
     loadSoundSources();
 
-    const LOTTERY_STORAGE_KEY = "gachaLotteryStateV5";
+    const LOTTERY_STORAGE_KEY = "gachaLotteryStateV6";
     const LEGACY_LOTTERY_KEYS = [
+      "gachaLotteryStateV5",
       "gachaLotteryStateV4",
       "gachaLotteryStateV3",
       "gachaLotteryStateV2",
     ];
     let lotteryState = {
-      version: 5,
+      version: 6,
       currentPart: 1,
       config: {
         totalTickets: 330,

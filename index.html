@@ -27,12 +27,12 @@
     }
 
     :root {
-      --salmon: #ff8080;
-      --salmon-deep: #cc5a5a;
-      --salmon-dark: #b84b4b;
-      --salmon-accent: #ff9b9b;
-      --salmon-light: #ffd1d1;
-      --salmon-lighter: #ffe8e8;
+      --salmon: #ff9999;
+      --salmon-deep: #d86868;
+      --salmon-dark: #c85a5a;
+      --salmon-accent: #ffb3b3;
+      --salmon-light: #ffe1e1;
+      --salmon-lighter: #fff2f2;
     }
 
     body {
@@ -1073,15 +1073,16 @@
     }
 
     // ===== 抽選ロジック用状態管理 =====
-    const LOTTERY_STORAGE_KEY = "gachaLotteryStateV5";
+    const LOTTERY_STORAGE_KEY = "gachaLotteryStateV6";
     const LEGACY_LOTTERY_KEYS = [
+      "gachaLotteryStateV5",
       "gachaLotteryStateV4",
       "gachaLotteryStateV3",
       "gachaLotteryStateV2",
     ];
 
     let lotteryState = {
-      version: 5,
+      version: 6,
       currentPart: 1,
       config: {
         totalTickets: 330,
@@ -1333,7 +1334,31 @@
       return prize ? prize.key + "賞" : "";
     }
 
+    function ensureUnlimitedWhenUnset() {
+      if (!inputSessionDraws) return;
+      const raw = inputSessionDraws.value.trim();
+      if (raw !== "") return;
+      const c = lotteryState.config;
+      const s = lotteryState.state;
+      if (c.maxSessionDraw != null || s.sessionRemainingDraws != null) {
+        c.maxSessionDraw = null;
+        s.sessionRemainingDraws = null;
+        saveLotteryState();
+      }
+    }
+
+    function isSessionLimited() {
+      const c = lotteryState.config;
+      if (c.maxSessionDraw == null) return false;
+      if (!inputSessionDraws) return true;
+      const raw = inputSessionDraws.value.trim();
+      if (raw === "") return false;
+      const num = Number(raw);
+      return Number.isFinite(num) && num > 0;
+    }
+
     function updateStatusDisplay() {
+      ensureUnlimitedWhenUnset();
       const c = lotteryState.config;
       const s = lotteryState.state;
       statusPart.textContent = `現在の部：第 ${lotteryState.currentPart} 部`;
@@ -1344,8 +1369,8 @@
       summaryDrawnCount.textContent = `${s.personDrawnCount || 0} 回`;
       summaryWinCount.textContent = `${s.personWinCount || 0} 回`;
 
-      if (c.maxSessionDraw == null) {
-        statusSessionDraws.textContent = "未設定";
+      if (!isSessionLimited()) {
+        statusSessionDraws.textContent = "無制限";
       } else {
         const rem = s.sessionRemainingDraws != null ? s.sessionRemainingDraws : 0;
         statusSessionDraws.textContent = `${rem} 回 / ${c.maxSessionDraw} 回`;
@@ -1405,10 +1430,11 @@
     }
 
     function updateButtonsState() {
+      ensureUnlimitedWhenUnset();
       const s = lotteryState.state;
-      const c = lotteryState.config;
+      const sessionLimited = isSessionLimited();
       const sessionBlocked =
-        c.maxSessionDraw != null &&
+        sessionLimited &&
         s.sessionRemainingDraws != null &&
         s.sessionRemainingDraws <= 0;
       undoButton.disabled = !lotteryState.lastDraw;
@@ -1486,6 +1512,7 @@
     }
 
     function performDraw() {
+      ensureUnlimitedWhenUnset();
       const s = lotteryState.state;
       const c = lotteryState.config;
       const prizes = lotteryState.prizes;
@@ -1496,8 +1523,9 @@
         return null;
       }
 
+      const sessionLimited = isSessionLimited();
       if (
-        c.maxSessionDraw != null &&
+        sessionLimited &&
         s.sessionRemainingDraws != null &&
         s.sessionRemainingDraws <= 0
       ) {
@@ -1660,10 +1688,12 @@
     const START_SOUND_LIMIT_MS = 500;
 
     function spinGacha() {
+      ensureUnlimitedWhenUnset();
       const s = lotteryState.state;
       const c = lotteryState.config;
+      const sessionLimited = isSessionLimited();
       const sessionBlocked =
-        c.maxSessionDraw != null &&
+        sessionLimited &&
         s.sessionRemainingDraws != null &&
         s.sessionRemainingDraws <= 0;
 
@@ -1685,22 +1715,7 @@
       playSafe(startSound, START_SOUND_LIMIT_MS);
 
 
-      let tempKeys = getEnabledPrizeKeys();
-      if (tempKeys.length === 0) {
-        tempKeys = ["A", "B", "C", "D", "E"];
-      }
-
-      const spinInterval = setInterval(() => {
-        const key = tempKeys[Math.floor(Math.random() * tempKeys.length)];
-        const defPath = key.toLowerCase() + ".png";
-        resultImage.src = getImageSrc(key, defPath);
-        resultImage.style.visibility = "visible";
-        resultImage.style.opacity = 0.5;
-        resultImage.style.transform = "scale(0.95)";
-      }, SPIN_INTERVAL_MS);
-
       setTimeout(() => {
-        clearInterval(spinInterval);
 
         const drawResult = performDraw();
         if (!drawResult) {
