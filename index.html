@@ -1137,6 +1137,7 @@
         title: "Boosty Winter Party 2026",
         winText: "おめでとうございます！",
         maxSessionDraw: null, // ★ 初期は上限なし
+        startSoundMuted: true,
       },
       prizes: [],
       state: {
@@ -1822,7 +1823,9 @@
       placeholderText.style.display = "none";
       gachaButtons.forEach((btn) => btn.classList.remove("is-win"));
 
-      playSafe(startSound, START_SOUND_LIMIT_MS);
+      if (!lotteryState.config.startSoundMuted) {
+        playSafe(startSound, START_SOUND_LIMIT_MS);
+      }
 
 
       setTimeout(() => {
