@@ -1407,12 +1407,10 @@
     function updateButtonsState() {
       const s = lotteryState.state;
       const c = lotteryState.config;
-      const sessionUnset = c.maxSessionDraw == null || s.sessionRemainingDraws == null;
       const sessionBlocked =
-        sessionUnset ||
-        (c.maxSessionDraw != null &&
-          s.sessionRemainingDraws != null &&
-          s.sessionRemainingDraws <= 0);
+        c.maxSessionDraw != null &&
+        s.sessionRemainingDraws != null &&
+        s.sessionRemainingDraws <= 0;
       undoButton.disabled = !lotteryState.lastDraw;
       const gachaDisabled =
         s.remainingTickets <= 0 || isSpinning || sessionBlocked;
@@ -1462,7 +1460,8 @@
       const c = lotteryState.config;
       const s = lotteryState.state;
 
-      s.sessionRemainingDraws = 0;
+      s.sessionRemainingDraws =
+        c.maxSessionDraw != null ? c.maxSessionDraw : null;
       s.personDrawnCount = 0;
       s.personWinCount = 0;
 
@@ -1656,8 +1655,8 @@
       return prizes.filter((p) => p.enabled).map((p) => p.key);
     }
 
-    const SPIN_INTERVAL_MS = 50;
-    const SPIN_DURATION_MS = 450;
+    const SPIN_INTERVAL_MS = 35;
+    const SPIN_DURATION_MS = 300;
     const START_SOUND_LIMIT_MS = 500;
 
     function spinGacha() {
@@ -1670,11 +1669,7 @@
 
       if (isSpinning || s.remainingTickets <= 0 || sessionBlocked) {
         if (sessionBlocked) {
-          if (c.maxSessionDraw == null || s.sessionRemainingDraws == null) {
-            resultText.textContent = "挑戦回数をセットしてください。";
-          } else {
-            resultText.textContent = "今回の挑戦回数は終了しました。";
-          }
+          resultText.textContent = "今回の挑戦回数は終了しました。";
         }
         return;
       }
@@ -1851,8 +1846,8 @@
     applySessionButton.addEventListener("click", () => {
       const v = inputSessionDraws.value.trim();
       if (v === "") {
-        alert("挑戦回数を入力してセットしてください。");
-        return;
+        lotteryState.config.maxSessionDraw = null;
+        lotteryState.state.sessionRemainingDraws = null;
       } else {
         const num = parseInt(v, 10);
         if (isNaN(num) || num <= 0) {
