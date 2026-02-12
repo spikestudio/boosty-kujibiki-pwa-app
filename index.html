@@ -1127,9 +1127,9 @@
         winCount: 0,
         personDrawnCount: 0,
         personWinCount: 0,
-        remainingTickets: 330,
+        remainingTickets: 100,
         remainingWins: 10,
-        prizeRemainingWins: null,
+        prizeRemainingWins: {},
         sessionRemainingDraws: null, // ★ 初期は上限なし
       },
       lastDraw: null, // {outcome, prizeKey}
@@ -1285,10 +1285,7 @@
         };
       }
 
-      if (
-        !lotteryState.state.prizeRemainingWins ||
-        Object.keys(lotteryState.state.prizeRemainingWins).length === 0
-      ) {
+      if (!lotteryState.state.prizeRemainingWins) {
         lotteryState.state.prizeRemainingWins = {};
         let remWins = 0;
         lotteryState.prizes.forEach((p) => {
@@ -1494,14 +1491,6 @@
         resultImage.style.visibility = "hidden";
         resultImage.style.opacity = 0;
       }
-    }
-
-    function resetResultDisplayToIdle() {
-      resultText.textContent = "";
-      resultText.classList.remove("is-win", "is-lose");
-      placeholderText.style.display = "block";
-      resultImage.style.visibility = "hidden";
-      resultImage.style.opacity = 0;
     }
 
     function updateConfigInputs() {
@@ -1774,7 +1763,6 @@
     }
 
     const SPIN_DURATION_MS = 220;
-    const RESULT_RESET_DELAY_MS = 700;
     const START_SOUND_LIMIT_MS = 500;
 
     function spinGacha() {
@@ -1837,12 +1825,6 @@
           resultText.classList.add("is-lose");
           playResultSound("lose");
         }
-
-        setTimeout(() => {
-          if (!isSpinning) {
-            resetResultDisplayToIdle();
-          }
-        }, RESULT_RESET_DELAY_MS);
 
 
         isSpinning = false;
