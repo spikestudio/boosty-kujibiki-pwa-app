@@ -1795,6 +1795,7 @@
     const RESULT_RESET_DELAY_WIN_MS = 1000;
     const RESULT_RESET_DELAY_LOSE_MS = 700;
     const START_SOUND_LIMIT_MS = 500;
+    const START_SOUND_MUTED = true;
 
     async function spinGacha() {
       unlockAudio();
@@ -1822,7 +1823,9 @@
       placeholderText.style.display = "none";
       gachaButtons.forEach((btn) => btn.classList.remove("is-win"));
 
-      playSafe(startSound, START_SOUND_LIMIT_MS);
+      if (!START_SOUND_MUTED) {
+        playSafe(startSound, START_SOUND_LIMIT_MS);
+      }
 
 
       setTimeout(() => {
