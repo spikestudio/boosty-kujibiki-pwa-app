@@ -1004,6 +1004,7 @@
       const audio = new Audio(src);
       audio.preload = "auto";
       audio.playsInline = true;
+      audio.load();
       return audio;
     }
 
@@ -1014,17 +1015,61 @@
     // Unlock audio on iOS/WKWebView which blocks playback until a user gesture.
     const audioUnlockEvents = ["pointerdown", "touchstart", "click", "keydown"];
     let audioUnlocked = false;
+    let audioCtx = null;
+    let resultWinBuffer = null;
+    let resultLoseBuffer = null;
+    let resultWinLoadPromise = null;
+    let resultLoseLoadPromise = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) audioCtx = new AudioCtx();
+      }
+      return audioCtx;
+    }
+
+    async function loadAudioBuffer(src) {
+      const ctx = getAudioContext();
+      if (!ctx) return null;
+      try {
+        const res = await fetch(src, { cache: "no-store" });
+        if (!res.ok) {
+          throw new Error(
+            `音声取得に失敗しました: ${res.status} ${res.statusText}`
+          );
+        }
+        const arrayBuffer = await res.arrayBuffer();
+        return await ctx.decodeAudioData(arrayBuffer);
+      } catch (e) {
+        console.warn("サウンドの事前読み込みに失敗しました:", e);
+        return null;
+      }
+    }
+
+    async function ensureResultBuffersLoaded() {
+      if (resultWinBuffer && resultLoseBuffer) return;
+      if (!resultWinLoadPromise) {
+        resultWinLoadPromise = loadAudioBuffer(
+          getSoundSrc("resultWin", "atari.mp3")
+        );
+      }
+      if (!resultLoseLoadPromise) {
+        resultLoseLoadPromise = loadAudioBuffer(
+          getSoundSrc("resultLose", "hazure.mp3")
+        );
+      }
+      resultWinBuffer = resultWinBuffer || (await resultWinLoadPromise);
+      resultLoseBuffer = resultLoseBuffer || (await resultLoseLoadPromise);
+    }
 
     function unlockAudio() {
       if (audioUnlocked) return;
       audioUnlocked = true;
 
       try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (AudioCtx) {
-          const ctx = new AudioCtx();
-          ctx.resume().catch(() => {});
-        }
+        const ctx = getAudioContext();
+        if (ctx) ctx.resume().catch(() => {});
       } catch (e) {}
 
       [startSound, resultWinSound, resultLoseSound].forEach((audio) => {
@@ -1054,7 +1099,7 @@
     );
 
     async function playSafe(audio, limitMs) {
-      if (!audio) return;
+      if (!audio) return false;
       try {
         audio.currentTime = 0;
         const p = audio.play();
@@ -1067,8 +1112,10 @@
           }, limitMs);
         }
         await p;
+        return true;
       } catch (e) {
         console.warn("サウンド再生に失敗しました:", e);
+        return false;
       }
     }
 
@@ -1097,9 +1144,9 @@
         winCount: 0,
         personDrawnCount: 0,
         personWinCount: 0,
-        remainingTickets: 100,
+        remainingTickets: 330,
         remainingWins: 10,
-        prizeRemainingWins: {},
+        prizeRemainingWins: null,
         sessionRemainingDraws: null, // ★ 初期は上限なし
       },
       lastDraw: null, // {outcome, prizeKey}
@@ -1136,6 +1183,46 @@
         }
       } catch (e) {
         // ignore
+      }
+    }
+
+    async function playResultBuffer(buffer) {
+      const ctx = getAudioContext();
+      if (!ctx || !buffer) return false;
+      try {
+        if (ctx.state === "suspended") {
+          await ctx.resume();
+        }
+        const source = ctx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(ctx.destination);
+        source.start(0);
+        return true;
+      } catch (e) {
+        console.warn("WebAudio再生に失敗しました:", e);
+        return false;
+      }
+    }
+
+    async function playResultSound(type) {
+      unlockAudio();
+      await ensureResultBuffersLoaded();
+      const buffer = type === "win" ? resultWinBuffer : resultLoseBuffer;
+      const played = await playResultBuffer(buffer);
+      if (!played) {
+        const fallback = type === "win" ? resultWinSound : resultLoseSound;
+        const playedFallback = await playSafe(fallback);
+        if (playedFallback) return;
+      }
+      if (!played) {
+        try {
+          const fallbackSrc =
+            type === "win"
+              ? getSoundSrc("resultWin", "atari.mp3")
+              : getSoundSrc("resultLose", "hazure.mp3");
+          const tempAudio = createAudio(fallbackSrc);
+          await playSafe(tempAudio);
+        } catch (e) {}
       }
     }
 
@@ -1208,7 +1295,7 @@
           personWinCount: 0,
           remainingTickets: lotteryState.config.totalTickets,
           remainingWins: sumWins,
-          prizeRemainingWins: {},
+          prizeRemainingWins: null,
           sessionRemainingDraws:
             lotteryState.config.maxSessionDraw != null
               ? lotteryState.config.maxSessionDraw
@@ -1216,7 +1303,10 @@
         };
       }
 
-      if (!lotteryState.state.prizeRemainingWins) {
+      if (
+        !lotteryState.state.prizeRemainingWins ||
+        Object.keys(lotteryState.state.prizeRemainingWins).length === 0
+      ) {
         lotteryState.state.prizeRemainingWins = {};
         let remWins = 0;
         lotteryState.prizes.forEach((p) => {
@@ -1422,6 +1512,14 @@
         resultImage.style.visibility = "hidden";
         resultImage.style.opacity = 0;
       }
+    }
+
+    function resetResultDisplayToIdle() {
+      resultText.textContent = "";
+      resultText.classList.remove("is-win", "is-lose");
+      placeholderText.style.display = "block";
+      resultImage.style.visibility = "hidden";
+      resultImage.style.opacity = 0;
     }
 
     function updateConfigInputs() {
@@ -1694,9 +1792,13 @@
     }
 
     const SPIN_DURATION_MS = 220;
+    const RESULT_RESET_DELAY_WIN_MS = 1000;
+    const RESULT_RESET_DELAY_LOSE_MS = 700;
     const START_SOUND_LIMIT_MS = 500;
 
-    function spinGacha() {
+    async function spinGacha() {
+      unlockAudio();
+      await ensureResultBuffersLoaded();
       ensureUnlimitedWhenUnset();
       const s = lotteryState.state;
       const sessionLimited = isSessionLimited();
@@ -1746,15 +1848,23 @@
         if (outcome === "win") {
           resultText.textContent = c2.winText || "当たり！";
           resultText.classList.add("is-win");
-          playSafe(resultWinSound);
+          playResultSound("win");
           launchConfetti();
           gachaButtons.forEach((btn) => btn.classList.add("is-win"));
         } else {
           resultText.textContent = "ハズレ…";
           resultText.classList.add("is-lose");
-          playSafe(resultLoseSound);
+          playResultSound("lose");
         }
 
+        const resetDelay = outcome === "win"
+          ? RESULT_RESET_DELAY_WIN_MS
+          : RESULT_RESET_DELAY_LOSE_MS;
+        setTimeout(() => {
+          if (!isSpinning) {
+            resetResultDisplayToIdle();
+          }
+        }, resetDelay);
 
         isSpinning = false;
         updateButtonsState();
