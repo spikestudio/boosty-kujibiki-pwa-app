@@ -1496,6 +1496,14 @@
       }
     }
 
+    function resetResultDisplayToIdle() {
+      resultText.textContent = "";
+      resultText.classList.remove("is-win", "is-lose");
+      placeholderText.style.display = "block";
+      resultImage.style.visibility = "hidden";
+      resultImage.style.opacity = 0;
+    }
+
     function updateConfigInputs() {
       const c = lotteryState.config;
       if (inputTitle) inputTitle.value = c.title || "ローカルガチャ抽選機";
@@ -1766,6 +1774,8 @@
     }
 
     const SPIN_DURATION_MS = 220;
+    const RESULT_RESET_DELAY_WIN_MS = 1000;
+    const RESULT_RESET_DELAY_LOSE_MS = 700;
     const START_SOUND_LIMIT_MS = 500;
 
     function spinGacha() {
@@ -1829,6 +1839,14 @@
           playResultSound("lose");
         }
 
+        const resetDelay = outcome === "win"
+          ? RESULT_RESET_DELAY_WIN_MS
+          : RESULT_RESET_DELAY_LOSE_MS;
+        setTimeout(() => {
+          if (!isSpinning) {
+            resetResultDisplayToIdle();
+          }
+        }, resetDelay);
 
         isSpinning = false;
         updateButtonsState();
