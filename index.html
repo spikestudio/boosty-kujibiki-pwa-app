@@ -1364,12 +1364,7 @@
 
     function isSessionLimited() {
       const c = lotteryState.config;
-      if (c.maxSessionDraw == null) return false;
-      if (!inputSessionDraws) return true;
-      const raw = inputSessionDraws.value.trim();
-      if (raw === "") return false;
-      const num = Number(raw);
-      return Number.isFinite(num) && num > 0;
+      return c.maxSessionDraw != null;
     }
 
     function updateStatusDisplay() {
@@ -1698,14 +1693,12 @@
       return prizes.filter((p) => p.enabled).map((p) => p.key);
     }
 
-    const SPIN_INTERVAL_MS = 25;
     const SPIN_DURATION_MS = 220;
     const START_SOUND_LIMIT_MS = 500;
 
     function spinGacha() {
       ensureUnlimitedWhenUnset();
       const s = lotteryState.state;
-      const c = lotteryState.config;
       const sessionLimited = isSessionLimited();
       const sessionBlocked =
         sessionLimited &&
