@@ -1018,6 +1018,8 @@
     let audioCtx = null;
     let resultWinBuffer = null;
     let resultLoseBuffer = null;
+    let resultWinLoadPromise = null;
+    let resultLoseLoadPromise = null;
 
     function getAudioContext() {
       if (!audioCtx) {
@@ -1032,6 +1034,11 @@
       if (!ctx) return null;
       try {
         const res = await fetch(src, { cache: "no-store" });
+        if (!res.ok) {
+          throw new Error(
+            `音声取得に失敗しました: ${res.status} ${res.statusText}`
+          );
+        }
         const arrayBuffer = await res.arrayBuffer();
         return await ctx.decodeAudioData(arrayBuffer);
       } catch (e) {
@@ -1042,10 +1049,18 @@
 
     async function ensureResultBuffersLoaded() {
       if (resultWinBuffer && resultLoseBuffer) return;
-      resultWinBuffer =
-        resultWinBuffer || (await loadAudioBuffer(getSoundSrc("resultWin", "atari.mp3")));
-      resultLoseBuffer =
-        resultLoseBuffer || (await loadAudioBuffer(getSoundSrc("resultLose", "hazure.mp3")));
+      if (!resultWinLoadPromise) {
+        resultWinLoadPromise = loadAudioBuffer(
+          getSoundSrc("resultWin", "atari.mp3")
+        );
+      }
+      if (!resultLoseLoadPromise) {
+        resultLoseLoadPromise = loadAudioBuffer(
+          getSoundSrc("resultLose", "hazure.mp3")
+        );
+      }
+      resultWinBuffer = resultWinBuffer || (await resultWinLoadPromise);
+      resultLoseBuffer = resultLoseBuffer || (await resultLoseLoadPromise);
     }
 
     function unlockAudio() {
@@ -1084,7 +1099,7 @@
     );
 
     async function playSafe(audio, limitMs) {
-      if (!audio) return;
+      if (!audio) return false;
       try {
         audio.currentTime = 0;
         const p = audio.play();
@@ -1097,8 +1112,10 @@
           }, limitMs);
         }
         await p;
+        return true;
       } catch (e) {
         console.warn("サウンド再生に失敗しました:", e);
+        return false;
       }
     }
 
@@ -1194,7 +1211,8 @@
       const played = await playResultBuffer(buffer);
       if (!played) {
         const fallback = type === "win" ? resultWinSound : resultLoseSound;
-        await playSafe(fallback);
+        const playedFallback = await playSafe(fallback);
+        if (playedFallback) return;
       }
       if (!played) {
         try {
@@ -1778,9 +1796,9 @@
     const RESULT_RESET_DELAY_LOSE_MS = 700;
     const START_SOUND_LIMIT_MS = 500;
 
-    function spinGacha() {
+    async function spinGacha() {
       unlockAudio();
-      ensureResultBuffersLoaded();
+      await ensureResultBuffersLoaded();
       ensureUnlimitedWhenUnset();
       const s = lotteryState.state;
       const sessionLimited = isSessionLimited();
