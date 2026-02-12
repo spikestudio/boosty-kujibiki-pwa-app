@@ -1127,9 +1127,9 @@
         winCount: 0,
         personDrawnCount: 0,
         personWinCount: 0,
-        remainingTickets: 100,
+        remainingTickets: 330,
         remainingWins: 10,
-        prizeRemainingWins: {},
+        prizeRemainingWins: null,
         sessionRemainingDraws: null, // ★ 初期は上限なし
       },
       lastDraw: null, // {outcome, prizeKey}
@@ -1277,7 +1277,7 @@
           personWinCount: 0,
           remainingTickets: lotteryState.config.totalTickets,
           remainingWins: sumWins,
-          prizeRemainingWins: {},
+          prizeRemainingWins: null,
           sessionRemainingDraws:
             lotteryState.config.maxSessionDraw != null
               ? lotteryState.config.maxSessionDraw
@@ -1285,7 +1285,10 @@
         };
       }
 
-      if (!lotteryState.state.prizeRemainingWins) {
+      if (
+        !lotteryState.state.prizeRemainingWins ||
+        Object.keys(lotteryState.state.prizeRemainingWins).length === 0
+      ) {
         lotteryState.state.prizeRemainingWins = {};
         let remWins = 0;
         lotteryState.prizes.forEach((p) => {
