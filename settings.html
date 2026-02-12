@@ -552,16 +552,31 @@
 
     function loadLotteryState() {
       try {
-        LEGACY_LOTTERY_KEYS.forEach((key) => {
-          try {
-            localStorage.removeItem(key);
-          } catch (e) {}
-        });
-        const raw = localStorage.getItem(LOTTERY_STORAGE_KEY);
+        let raw = localStorage.getItem(LOTTERY_STORAGE_KEY);
+        let loadedFromLegacy = false;
+
+        if (!raw) {
+          for (const key of LEGACY_LOTTERY_KEYS) {
+            raw = localStorage.getItem(key);
+            if (raw) {
+              loadedFromLegacy = true;
+              break;
+            }
+          }
+        }
+
         if (raw) {
           const parsed = JSON.parse(raw);
           if (parsed && typeof parsed === "object" && parsed.config && parsed.state) {
             lotteryState = parsed;
+            if (loadedFromLegacy) {
+              saveLotteryState();
+              LEGACY_LOTTERY_KEYS.forEach((key) => {
+                try {
+                  localStorage.removeItem(key);
+                } catch (e) {}
+              });
+            }
           }
         }
       } catch (e) {}
