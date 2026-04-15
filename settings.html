@@ -56,8 +56,8 @@
     .settings {
       background: #fff;
       border-radius: 12px;
-      padding: 12px;
-      box-shadow: 0 4px 14px rgba(255, 153, 153, 0.18);
+      padding: 20px 12px 12px;
+      box-shadow: 0 4px 14px rgba(var(--salmon-rgb), 0.18);
       text-align: left;
       font-size: 0.9rem;
     }
@@ -72,24 +72,26 @@
         var(--salmon-light)
       );
       text-decoration: none;
-      color: #7a2b2b;
+      color: var(--salmon-dark);
       font-weight: 700;
     }
     h2 {
       font-size: 1rem;
       margin-bottom: 6px;
     }
-    .env {
-      font-size: 0.8rem;
-      color: #999;
-      margin-bottom: 8px;
-    }
     .settings-section-title {
-      margin-top: 12px;
+      margin-top: 28px;
       margin-bottom: 4px;
+      padding-top: 20px;
+      border-top: 1px solid #e5e7eb;
       font-size: 0.95rem;
       font-weight: 700;
       color: var(--salmon-dark);
+    }
+    .settings-section-title:first-of-type {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
     }
     .note {
       color: #777;
@@ -127,6 +129,31 @@
       color: #fff;
       font-size: 0.95rem;
       cursor: pointer;
+    }
+    .btn-transfer {
+      flex: 1;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 2px solid var(--salmon);
+      background: #fff;
+      color: var(--salmon-dark);
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .toggle-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: #444;
+      cursor: pointer;
+    }
+    .toggle-label input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--salmon);
     }
     .image-setting-row,
     .sound-setting-row {
@@ -198,6 +225,250 @@
       font-size: 0.8rem;
       color: #999;
     }
+
+    .type-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .type-section-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .icon-button {
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      border: none;
+      background: var(--salmon-lighter);
+      color: var(--salmon-deep);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+    .add-type-button {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: var(--salmon);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .search-row {
+      display: none;
+      margin-bottom: 10px;
+    }
+    .search-row.open {
+      display: block;
+    }
+    .search-row input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--salmon-accent);
+      font-size: 0.95rem;
+    }
+
+    .active-type-card {
+      margin-top: 16px;
+      margin-bottom: 16px;
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: var(--salmon-lighter);
+      border-left: 5px solid var(--salmon);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .active-type-card-color-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .active-type-card-body {
+      flex: 1;
+      min-width: 0;
+    }
+    .active-type-card-label {
+      font-size: 0.72rem;
+      color: var(--salmon-deep);
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      margin-bottom: 1px;
+    }
+    .active-type-card-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #222;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .active-type-card-meta {
+      font-size: 0.82rem;
+      color: #666;
+      margin-top: 2px;
+    }
+    .type-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .type-item {
+      border-radius: 14px;
+      background: var(--salmon-lighter);
+      border: 1px solid rgba(216, 104, 104, 0.12);
+      overflow: hidden;
+    }
+    .type-item.active {
+      border-color: var(--salmon-accent);
+      box-shadow: 0 6px 16px rgba(216, 104, 104, 0.12);
+    }
+    .type-item-header {
+      display: grid;
+      grid-template-columns: auto 1fr auto auto auto;
+      gap: 8px;
+      align-items: center;
+      padding: 10px;
+    }
+    .type-color-chip {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 2px solid rgba(255, 255, 255, 0.85);
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+      background: var(--salmon);
+    }
+    .type-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #444;
+      min-width: 0;
+    }
+    .type-stats {
+      font-size: 0.8rem;
+      color: #666;
+      white-space: nowrap;
+    }
+    .type-rate {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--salmon-deep);
+      white-space: nowrap;
+    }
+    .type-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #fff;
+      background: var(--salmon);
+      border-radius: 999px;
+      padding: 5px 8px;
+      white-space: nowrap;
+    }
+    .type-inline-actions {
+      display: flex;
+      gap: 6px;
+      grid-column: 1 / -1;
+    }
+    .type-inline-actions button {
+      flex: 1;
+      border: none;
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+    .type-apply-btn {
+      background: #e4e4e4;
+      color: #555;
+    }
+    .type-active-btn {
+      background: var(--salmon);
+      color: #fff;
+      font-weight: 700;
+      pointer-events: none;
+    }
+    .type-edit-btn {
+      background: #fff;
+      color: #666;
+    }
+    .type-item-editor {
+      display: none;
+      padding: 0 10px 10px;
+      border-top: 1px solid rgba(216, 104, 104, 0.12);
+      background: rgba(255, 255, 255, 0.68);
+    }
+    .type-item.open .type-item-editor {
+      display: block;
+    }
+    .type-editor-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .type-editor-grid label {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.78rem;
+      color: #555;
+    }
+    .type-editor-grid label.full {
+      grid-column: 1 / -1;
+    }
+    .type-editor-grid input[type="text"],
+    .type-editor-grid input[type="number"],
+    .type-editor-grid input[type="color"] {
+      width: 100%;
+      border: 1px solid var(--salmon-accent);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.9rem;
+      background: #fff;
+    }
+    .type-editor-grid input[type="color"] {
+      padding: 4px;
+      min-height: 42px;
+    }
+    .type-editor-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .type-editor-actions button {
+      flex: 1;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .type-save-btn {
+      background: var(--salmon);
+      color: #fff;
+    }
+    .type-delete-btn {
+      background: #f1f1f1;
+      color: #666;
+    }
+    .empty-types {
+      border-radius: 12px;
+      padding: 12px;
+      background: var(--salmon-lighter);
+      color: #777;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
   </style>
 </head>
 <body>
@@ -205,23 +476,25 @@
     <h1>ローカルガチャ抽選機 設定</h1>
     <div class="settings">
       <a class="back-link" href="index.html">← ガチャ画面へ戻る</a>
-      <h2>環境情報</h2>
-      <div id="env-info" class="env"></div>
 
-      <div class="settings-section-title">抽選設定</div>
+      <div id="active-type-card" class="active-type-card"></div>
+
+      <div class="settings-section-title">設定の共有</div>
       <p class="note">
-        総くじ数（玉の総数）と合計当たり本数を設定します。<br />
-        各画像ごとの当たり本数の合計と、ここで設定する「合計当たり本数」が一致している必要があります。
+        設定をファイルに書き出して他のiPadに読み込ませることで、同じ設定を共有できます。<br />
+        インポートすると現在の設定が上書きされ、進行状況はリセットされます。
       </p>
-
       <div class="settings-row">
-        <label for="input-title">タイトル</label>
-        <input
-          id="input-title"
-          type="text"
-          placeholder="例: ローカルガチャ抽選機"
-        />
+        <button id="export-settings-btn" type="button" class="btn-transfer">⬇ 設定をエクスポート</button>
+        <button id="import-settings-btn" type="button" class="btn-transfer">⬆ 設定をインポート</button>
       </div>
+      <input id="import-file-input" type="file" accept=".json" style="display:none" />
+
+      <div class="settings-section-title">共通設定</div>
+      <p class="note">
+        総くじ数（玉の総数）は全タイプ共通です。<br />
+        当たり本数は抽選タイプごとに設定します。画像設定の当たり本数合計は、現在使用中の抽選タイプの当たり本数と一致している必要があります。
+      </p>
       <div class="settings-row">
         <label for="input-total-tickets">総くじ数</label>
         <input
@@ -233,22 +506,19 @@
         />
       </div>
       <div class="settings-row">
-        <label for="input-total-wins">合計当たり本数</label>
-        <input
-          id="input-total-wins"
-          type="number"
-          min="0"
-          step="1"
-          placeholder="例: 10"
-        />
-      </div>
-      <div class="settings-row">
-        <label for="input-win-text">当たりテキスト</label>
+        <label for="input-win-text">当たりテキスト（共通）</label>
         <input
           id="input-win-text"
           type="text"
           placeholder="例: 大当たり！"
         />
+      </div>
+      <div class="settings-row">
+        <label for="input-show-wins-ended">当たり本数終了ラベル</label>
+        <label class="toggle-label">
+          <input id="input-show-wins-ended" type="checkbox" />
+          <span>当たり本数が0になったとき終了ラベルを表示する</span>
+        </label>
       </div>
 
       <div class="settings-row">
@@ -258,14 +528,33 @@
           type="button"
           class="settings-main-btn"
         >
-          抽選設定を保存して現在の部をリセット
+          共通設定を保存して反映
         </button>
+      </div>
+
+      <div class="settings-section-title">抽選タイプ管理</div>
+      <p class="note">
+        ライブの部やイベントごとに抽選タイプを登録しておき、現場では「使用する」を押すだけで切り替えられます。<br />
+        各タイプごとに母数・当たり本数・タイトル・テーマカラーを設定できます。
+      </p>
+      <div class="type-section-header">
+        <div class="type-section-actions">
+          <button id="toggle-type-search" class="icon-button" type="button" aria-label="抽選タイプを検索">⌕</button>
+          <button id="add-type-button" class="add-type-button" type="button">+ 抽選タイプを追加</button>
+        </div>
+      </div>
+      <div id="type-search-row" class="search-row">
+        <input id="type-search-input" type="search" placeholder="抽選タイプ名で検索" />
+      </div>
+      <div id="type-list" class="type-list"></div>
+      <div id="empty-types" class="empty-types" hidden>
+        抽選タイプがまだありません。「+ 抽選タイプを追加」から作成してください。
       </div>
 
       <div class="settings-section-title">画像設定（A〜E）</div>
       <p class="note">
         A〜E の画像ごとに「有効／無効」「当たり／ハズレ」「当たり本数」「表示名（ラベル）」を設定できます。<br>
-        各画像の当たり本数の合計が、上記「合計当たり本数」と一致している必要があります。<br>
+        各画像の当たり本数の合計が、現在使用中の抽選タイプの当たり本数と一致している必要があります。<br>
         画像を設定しない場合は、同階層の a.png〜e.png が使われます。
       </p>
 
@@ -525,6 +814,7 @@
     loadSoundSources();
 
     const LOTTERY_STORAGE_KEY = "gachaLotteryStateV6";
+    const THEME_STORAGE_KEY = "gachaThemeColorV1";
     const LEGACY_LOTTERY_KEYS = [
       "gachaLotteryStateV5",
       "gachaLotteryStateV4",
@@ -554,6 +844,8 @@
         sessionRemainingDraws: null,
       },
       lastDraw: null,
+      lotteryTypes: [],
+      activeTypeId: null,
     };
 
     function loadLotteryState() {
@@ -594,9 +886,29 @@
       } catch (e) {}
     }
 
+    function saveThemeColor(color) {
+      try {
+        localStorage.setItem(THEME_STORAGE_KEY, color || "#ff9999");
+      } catch (e) {}
+    }
+
+    function loadThemeColor() {
+      try {
+        return localStorage.getItem(THEME_STORAGE_KEY) || null;
+      } catch (e) {
+        return null;
+      }
+    }
+
     function ensurePrizesInitialized() {
       if (!Array.isArray(lotteryState.prizes)) {
         lotteryState.prizes = [];
+      }
+      if (!Array.isArray(lotteryState.lotteryTypes)) {
+        lotteryState.lotteryTypes = [];
+      }
+      if (!("activeTypeId" in lotteryState)) {
+        lotteryState.activeTypeId = null;
       }
       const existingKeys = new Set(lotteryState.prizes.map((p) => p.key));
       // 初回は A だけ当たり10本、Bは有効だが当たりなし、C〜Eは無効
@@ -683,6 +995,8 @@
         lotteryState.state.personWinCount = 0;
       }
 
+      ensureLotteryTypesInitialized();
+
       if (
         lotteryState.config.maxSessionDraw != null &&
         (lotteryState.state.sessionRemainingDraws == null ||
@@ -696,44 +1010,529 @@
       saveLotteryState();
     }
 
+    function slugifyTypeName(name) {
+      return String(name || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "") || "type";
+    }
+
+    function buildThemeFromColor(color) {
+      const base = color || "#ff9999";
+      return {
+        base,
+        deep: mixHex(base, "#000000", 0.18),
+        dark: mixHex(base, "#000000", 0.28),
+        accent: mixHex(base, "#ffffff", 0.26),
+        light: mixHex(base, "#ffffff", 0.68),
+        lighter: mixHex(base, "#ffffff", 0.82),
+      };
+    }
+
+    function hexToRgb(hex) {
+      const normalized = String(hex || "").replace("#", "");
+      if (normalized.length !== 6) {
+        return { r: 255, g: 153, b: 153 };
+      }
+      return {
+        r: parseInt(normalized.slice(0, 2), 16),
+        g: parseInt(normalized.slice(2, 4), 16),
+        b: parseInt(normalized.slice(4, 6), 16),
+      };
+    }
+
+    function rgbToHex(r, g, b) {
+      return (
+        "#" +
+        [r, g, b]
+          .map((value) => Math.max(0, Math.min(255, Math.round(value))).toString(16).padStart(2, "0"))
+          .join("")
+      );
+    }
+
+    function mixHex(hexA, hexB, ratio) {
+      const a = hexToRgb(hexA);
+      const b = hexToRgb(hexB);
+      const t = Math.max(0, Math.min(1, ratio));
+      return rgbToHex(
+        a.r + (b.r - a.r) * t,
+        a.g + (b.g - a.g) * t,
+        a.b + (b.b - a.b) * t
+      );
+    }
+
+    function getTypeRateText(type) {
+      const totalTickets = Number(lotteryState.config && lotteryState.config.totalTickets) || Number(type && type.totalTickets) || 0;
+      const totalWins = Number(type && type.totalWins) || 0;
+      if (totalTickets <= 0) return "0%";
+      return ((totalWins / totalTickets) * 100).toFixed(totalWins % totalTickets === 0 ? 0 : 1) + "%";
+    }
+
+    function getTypeDisplayTitle(type) {
+      if (type && type.title && type.title.trim() !== "") {
+        return type.title.trim();
+      }
+      if (type && type.name && type.name.trim() !== "") {
+        return type.name.trim();
+      }
+      return "ローカルガチャ抽選機";
+    }
+
+    // 追加順プリセット色（1〜7番目、8番目以降はサーモンピンク）
+    const PRESET_COLORS = [
+      "#e03535", // 1: 赤
+      "#2563eb", // 2: 青
+      "#16a34a", // 3: 緑
+      "#ea7a0a", // 4: オレンジ
+      "#7c3aed", // 5: 紫
+      "#ca8a04", // 6: 黄色
+      "#ff9999", // 7: サーモンピンク
+    ];
+
+    function getPresetColor(index) {
+      const i = Math.max(0, index);
+      return PRESET_COLORS[i < PRESET_COLORS.length ? i : PRESET_COLORS.length - 1];
+    }
+
+    function getNextPresetColor() {
+      const usedColors = new Set(
+        lotteryState.lotteryTypes.map((t) => (t.themeColor || "").toLowerCase())
+      );
+      const unused = PRESET_COLORS.find((c) => !usedColors.has(c.toLowerCase()));
+      return unused || PRESET_COLORS[PRESET_COLORS.length - 1];
+    }
+
+    function createLotteryType(seed) {
+      const source = seed || {};
+      const color = source.themeColor != null ? source.themeColor : getPresetColor(lotteryState.lotteryTypes.length);
+      const name = source.name || `パターン${lotteryState.lotteryTypes.length + 1}`;
+      return {
+        id: source.id || `${slugifyTypeName(name)}-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+        name,
+        title: source.title || source.name || "ローカルガチャ抽選機",
+        totalTickets: Number(source.totalTickets) > 0 ? Number(source.totalTickets) : Number(lotteryState.config.totalTickets) || 100,
+        totalWins: Number(source.totalWins) >= 0 ? Number(source.totalWins) : Number(lotteryState.config.totalWins) || 10,
+        themeColor: color,
+        winText: source.winText || "",
+      };
+    }
+
+    function syncTypeTicketsToCommonTotal() {
+      const totalTickets = Number(lotteryState.config.totalTickets) || 0;
+      lotteryState.lotteryTypes.forEach((type) => {
+        type.totalTickets = totalTickets;
+      });
+    }
+
+    function scalePrizeWinsToTotal(targetTotalWins) {
+      const nextTotalWins = Math.max(0, Number(targetTotalWins) || 0);
+      const winPrizes = lotteryState.prizes.filter((prize) => prize.enabled && prize.isWin);
+
+      if (winPrizes.length === 0) {
+        return nextTotalWins === 0;
+      }
+
+      const baseTotal = winPrizes.reduce((sum, prize) => sum + Math.max(0, Number(prize.winCountTotal) || 0), 0);
+      if (baseTotal <= 0) {
+        if (nextTotalWins === 0) {
+          winPrizes.forEach((prize) => {
+            prize.winCountTotal = 0;
+          });
+          return true;
+        }
+        return false;
+      }
+
+      const scaled = winPrizes.map((prize) => {
+        const baseCount = Math.max(0, Number(prize.winCountTotal) || 0);
+        const raw = (baseCount / baseTotal) * nextTotalWins;
+        const floored = Math.floor(raw);
+        return {
+          prize,
+          floored,
+          remainder: raw - floored,
+        };
+      });
+
+      let assigned = scaled.reduce((sum, item) => sum + item.floored, 0);
+      scaled
+        .slice()
+        .sort((left, right) => right.remainder - left.remainder)
+        .forEach((item) => {
+          if (assigned >= nextTotalWins) return;
+          item.floored += 1;
+          assigned += 1;
+        });
+
+      scaled.forEach((item) => {
+        item.prize.winCountTotal = item.floored;
+      });
+
+      return true;
+    }
+
+    function ensureLotteryTypesInitialized() {
+      if (!Array.isArray(lotteryState.lotteryTypes)) {
+        lotteryState.lotteryTypes = [];
+      }
+      if (lotteryState.lotteryTypes.length === 0) {
+        const defaultType = createLotteryType({
+          id: "default-type",
+          name: "パターンA",
+          totalTickets: lotteryState.config.totalTickets,
+          totalWins: lotteryState.config.totalWins,
+          themeColor: getPresetColor(0),
+        });
+        lotteryState.lotteryTypes.push(defaultType);
+        lotteryState.activeTypeId = defaultType.id;
+      }
+      if (!lotteryState.activeTypeId) {
+        lotteryState.activeTypeId = lotteryState.lotteryTypes[0].id;
+      }
+      syncTypeTicketsToCommonTotal();
+      const activeType = lotteryState.lotteryTypes.find((type) => type.id === lotteryState.activeTypeId);
+      if (activeType) {
+        lotteryState.config.totalWins = activeType.totalWins;
+        lotteryState.config.title = getTypeDisplayTitle(activeType);
+        lotteryState.config.themeColor = activeType.themeColor || "#ff9999";
+      }
+    }
+
     loadLotteryState();
     ensurePrizesInitialized();
 
-    const envInfo = document.getElementById("env-info");
-    const inputTitle = document.getElementById("input-title");
     const inputTotalTickets = document.getElementById("input-total-tickets");
-    const inputTotalWins = document.getElementById("input-total-wins");
     const inputWinText = document.getElementById("input-win-text");
+    const inputShowWinsEnded = document.getElementById("input-show-wins-ended");
     const applyConfigButton = document.getElementById("apply-config-button");
     const inputStartSoundMuted = document.getElementById(
       "input-start-sound-muted"
     );
+    const activeTypeCard = document.getElementById("active-type-card");
+    const typeList = document.getElementById("type-list");
+    const emptyTypes = document.getElementById("empty-types");
+    const addTypeButton = document.getElementById("add-type-button");
+    const toggleTypeSearch = document.getElementById("toggle-type-search");
+    const typeSearchRow = document.getElementById("type-search-row");
+    const typeSearchInput = document.getElementById("type-search-input");
 
-    try {
-      const href = location.href || "";
-      if (envInfo) {
-        if (href.startsWith("content://")) {
-          envInfo.textContent =
-            "現在のURL: content:// ... （ローカルファイル・コンテンツ経由）";
-        } else if (href.startsWith("file://")) {
-          envInfo.textContent = "現在のURL: file:// ... （ローカルファイル）";
-        } else if (href.startsWith("http")) {
-          envInfo.textContent = "現在のURL: " + href.split("#")[0];
-        }
-      }
-    } catch (e) {
-      if (envInfo) envInfo.textContent = "";
-    }
+    let expandedTypeId = null;
+    let typeSearchKeyword = "";
 
     function updateConfigInputs() {
       const c = lotteryState.config;
-      if (inputTitle)
-        inputTitle.value = c.title || "Boosty Winter Party 2026";
       if (inputTotalTickets) inputTotalTickets.value = c.totalTickets;
-      if (inputTotalWins) inputTotalWins.value = c.totalWins;
       if (inputWinText) inputWinText.value = c.winText || "";
+      if (inputShowWinsEnded) inputShowWinsEnded.checked = !!c.showWinsEndedLabel;
       if (inputStartSoundMuted)
         inputStartSoundMuted.checked = c.startSoundMuted !== false;
+    }
+
+    function renderActiveTypeCard() {
+      if (!activeTypeCard) return;
+      const activeType = lotteryState.lotteryTypes.find((type) => type.id === lotteryState.activeTypeId);
+      if (!activeType) {
+        activeTypeCard.innerHTML = '<div class="active-type-card-body"><div class="active-type-card-title">抽選タイプ未設定</div></div>';
+        return;
+      }
+      const color = activeType.themeColor || "#ff9999";
+      activeTypeCard.style.borderLeftColor = color;
+      activeTypeCard.style.background = "";
+      activeTypeCard.innerHTML = `
+        <div class="active-type-card-color-dot" style="background:${color};"></div>
+        <div class="active-type-card-body">
+          <div class="active-type-card-label">現在使用中の抽選タイプ</div>
+          <div class="active-type-card-title">${escapeHtml(activeType.name)}</div>
+          <div class="active-type-card-meta">当たり ${activeType.totalWins}本 ／ 総くじ ${lotteryState.config.totalTickets}本 ／ ${getTypeRateText(activeType)}</div>
+        </div>
+      `;
+    }
+
+    function escapeHtml(text) {
+      return String(text == null ? "" : text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function getFilteredTypes() {
+      const keyword = typeSearchKeyword.trim().toLowerCase();
+      const types = [...lotteryState.lotteryTypes];
+      types.sort((left, right) => {
+        const leftScore = left.id === lotteryState.activeTypeId ? -1 : 0;
+        const rightScore = right.id === lotteryState.activeTypeId ? -1 : 0;
+        if (leftScore !== rightScore) return leftScore - rightScore;
+        return left.name.localeCompare(right.name, "ja");
+      });
+      if (!keyword) return types;
+      return types.filter((type) => type.name.toLowerCase().includes(keyword));
+    }
+
+    function renderTypeList() {
+      if (!typeList || !emptyTypes) return;
+      const filteredTypes = getFilteredTypes();
+      emptyTypes.hidden = filteredTypes.length > 0;
+      typeList.innerHTML = filteredTypes
+        .map((type) => {
+          const isActive = type.id === lotteryState.activeTypeId;
+          const isOpen = type.id === expandedTypeId;
+          const theme = buildThemeFromColor(type.themeColor);
+          return `
+            <div class="type-item${isActive ? " active" : ""}${isOpen ? " open" : ""}" data-type-id="${escapeHtml(type.id)}">
+              <div class="type-item-header">
+                <div class="type-color-chip" style="background:${theme.base}"></div>
+                <div class="type-name">${escapeHtml(type.name)}</div>
+                <div class="type-stats">${type.totalWins} / ${lotteryState.config.totalTickets}</div>
+                <div class="type-rate">${getTypeRateText(type)}</div>
+                ${isActive ? '<div class="type-badge">使用中</div>' : ""}
+                <div class="type-inline-actions">
+                  <button class="${isActive ? 'type-active-btn' : 'type-apply-btn'}" ${isActive ? `style="background:${theme.base};color:#fff;"` : ''} type="button" data-action="apply">${isActive ? "使用中" : "使用する"}</button>
+                  <button class="type-edit-btn" type="button" data-action="toggle">${isOpen ? "閉じる" : "編集"}</button>
+                </div>
+              </div>
+              <div class="type-item-editor">
+                <div class="type-editor-grid">
+                  <label class="full">パターン名
+                    <input type="text" data-field="name" value="${escapeHtml(type.name)}" />
+                  </label>
+                  <label class="full">タイトル
+                    <input type="text" data-field="title" value="${escapeHtml(type.title || "")}" placeholder="未入力時はパターン名を表示" />
+                  </label>
+                  <label>当たり本数
+                    <input type="number" min="0" step="1" data-field="totalWins" value="${type.totalWins}" />
+                  </label>
+                  <label class="full">テーマカラー
+                    <input type="color" data-field="themeColor" value="${escapeHtml(type.themeColor || "#ff9999")}" />
+                  </label>
+                  <label class="full">当たりテキスト（個別）
+                    <input type="text" data-field="winText" value="${escapeHtml(type.winText || "")}" placeholder="未入力時は共通設定のテキストを使用" />
+                  </label>
+                </div>
+                <div class="type-editor-actions">
+                  <button class="type-save-btn" type="button" data-action="save">${isActive ? "保存して反映" : "保存"}</button>
+                  <button class="type-delete-btn" type="button" data-action="delete">削除</button>
+                </div>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    function applyTypeToConfig(type, shouldReset) {
+      lotteryState.activeTypeId = type.id;
+      syncTypeTicketsToCommonTotal();
+      lotteryState.config.totalWins = type.totalWins;
+      lotteryState.config.title = getTypeDisplayTitle(type);
+      lotteryState.config.themeColor = type.themeColor || "#ff9999";
+      saveThemeColor(lotteryState.config.themeColor);
+      updateConfigInputs();
+      if (shouldReset) {
+        const prizeSyncOk = scalePrizeWinsToTotal(type.totalWins);
+        if (!prizeSyncOk) {
+          alert("当たり画像の内訳が未設定のため、この抽選タイプを反映できません。先に画像設定で当たり画像の本数を設定してください。");
+          return;
+        }
+        resetStateForCurrentPart();
+      }
+      saveLotteryState();
+      renderActiveTypeCard();
+      applyThemeToDocument();
+      renderTypeList();
+    }
+
+    function applyThemeToDocument() {
+      const activeType = lotteryState.lotteryTypes
+        ? lotteryState.lotteryTypes.find((t) => t.id === lotteryState.activeTypeId)
+        : null;
+      const color =
+        (activeType && activeType.themeColor) ||
+        (lotteryState.config && lotteryState.config.themeColor) ||
+        loadThemeColor() ||
+        "#ff9999";
+      const theme = buildThemeFromColor(color);
+      const rgb = hexToRgb(theme.base);
+      const deepRgb = hexToRgb(theme.deep);
+      const darkRgb = hexToRgb(theme.dark);
+      let styleEl = document.getElementById("theme-override-style");
+      if (!styleEl) {
+        styleEl = document.createElement("style");
+        styleEl.id = "theme-override-style";
+        document.head.appendChild(styleEl);
+      }
+      styleEl.textContent = [
+        ":root {",
+        `  --salmon: ${theme.base} !important;`,
+        `  --salmon-deep: ${theme.deep} !important;`,
+        `  --salmon-dark: ${theme.dark} !important;`,
+        `  --salmon-accent: ${theme.accent} !important;`,
+        `  --salmon-light: ${theme.light} !important;`,
+        `  --salmon-lighter: ${theme.lighter} !important;`,
+        `  --salmon-rgb: ${rgb.r}, ${rgb.g}, ${rgb.b} !important;`,
+        `  --salmon-deep-rgb: ${deepRgb.r}, ${deepRgb.g}, ${deepRgb.b} !important;`,
+        `  --salmon-dark-rgb: ${darkRgb.r}, ${darkRgb.g}, ${darkRgb.b} !important;`,
+        "}",
+        "body {",
+        `  background: radial-gradient(circle at top, ${theme.lighter} 0%, ${theme.light} 50%, #fff 100%) !important;`,
+        "}",
+      ].join("\n");
+    }
+
+    function addLotteryType() {
+      const nextIndex = lotteryState.lotteryTypes.length;
+      const nextType = createLotteryType({
+        name: `パターン${nextIndex + 1}`,
+        totalWins: lotteryState.config.totalWins,
+        title: getTypeDisplayTitle(lotteryState.lotteryTypes.find((type) => type.id === lotteryState.activeTypeId) || {}),
+        themeColor: getNextPresetColor(),
+      });
+      lotteryState.lotteryTypes.push(nextType);
+      expandedTypeId = nextType.id;
+      saveLotteryState();
+      renderTypeList();
+    }
+
+    function updateTypePreview(item) {
+      const colorInput = item.querySelector('[data-field="themeColor"]');
+      if (!colorInput) return;
+      const theme = buildThemeFromColor(colorInput.value || "#ff9999");
+      const chip = item.querySelector('.type-color-chip');
+      if (chip) chip.style.background = theme.base;
+    }
+
+    function saveTypeFromItem(item) {
+      const typeId = item.getAttribute("data-type-id");
+      const target = lotteryState.lotteryTypes.find((type) => type.id === typeId);
+      if (!target) return;
+      const name = item.querySelector('[data-field="name"]').value.trim();
+      const title = item.querySelector('[data-field="title"]').value.trim();
+      const totalWins = parseInt(item.querySelector('[data-field="totalWins"]').value, 10);
+      const themeColor = item.querySelector('[data-field="themeColor"]').value || "#ff9999";
+      const winTextInput = item.querySelector('[data-field="winText"]');
+      const winText = winTextInput ? winTextInput.value.trim() : "";
+
+      if (!name) {
+        alert("パターン名を入力してください。");
+        return;
+      }
+      if (Number.isNaN(totalWins) || totalWins < 0) {
+        alert("当たり本数は0以上の整数で入力してください。");
+        return;
+      }
+      if (totalWins > lotteryState.config.totalTickets) {
+        alert("当たり本数は共通設定の総くじ数以下にしてください。");
+        return;
+      }
+
+      target.name = name;
+      target.title = title;
+      target.totalTickets = lotteryState.config.totalTickets;
+      target.totalWins = totalWins;
+      target.themeColor = themeColor;
+      target.winText = winText;
+
+      expandedTypeId = null;
+      if (target.id === lotteryState.activeTypeId) {
+        applyTypeToConfig(target, true);
+      } else {
+        saveLotteryState();
+        renderActiveTypeCard();
+        renderTypeList();
+      }
+    }
+
+    function deleteType(typeId) {
+      if (lotteryState.lotteryTypes.length <= 1) {
+        alert("抽選タイプは最低1件必要です。");
+        return;
+      }
+      const target = lotteryState.lotteryTypes.find((type) => type.id === typeId);
+      if (!target) return;
+      const confirmed = confirm(`「${target.name}」を削除します。よろしいですか？`);
+      if (!confirmed) return;
+      lotteryState.lotteryTypes = lotteryState.lotteryTypes.filter((type) => type.id !== typeId);
+      if (lotteryState.activeTypeId === typeId) {
+        const fallbackType = lotteryState.lotteryTypes[0];
+        applyTypeToConfig(fallbackType, true);
+      } else {
+        saveLotteryState();
+        renderActiveTypeCard();
+        renderTypeList();
+      }
+      if (expandedTypeId === typeId) {
+        expandedTypeId = null;
+      }
+    }
+
+    function setupLotteryTypeUI() {
+      renderActiveTypeCard();
+      renderTypeList();
+
+      if (toggleTypeSearch) {
+        toggleTypeSearch.addEventListener("click", () => {
+          const willOpen = !typeSearchRow.classList.contains("open");
+          typeSearchRow.classList.toggle("open", willOpen);
+          if (willOpen) {
+            typeSearchInput.focus();
+          } else {
+            typeSearchKeyword = "";
+            typeSearchInput.value = "";
+            renderTypeList();
+          }
+        });
+      }
+
+      if (typeSearchInput) {
+        typeSearchInput.addEventListener("input", () => {
+          typeSearchKeyword = typeSearchInput.value || "";
+          renderTypeList();
+        });
+      }
+
+      if (addTypeButton) {
+        addTypeButton.addEventListener("click", addLotteryType);
+      }
+
+      if (typeList) {
+        typeList.addEventListener("click", (event) => {
+          const target = event.target;
+          if (!(target instanceof HTMLElement)) return;
+          const action = target.getAttribute("data-action");
+          const item = target.closest(".type-item");
+          if (!item || !action) return;
+          const typeId = item.getAttribute("data-type-id");
+          if (action === "toggle") {
+            expandedTypeId = expandedTypeId === typeId ? null : typeId;
+            renderTypeList();
+            return;
+          }
+          if (action === "apply") {
+            const nextType = lotteryState.lotteryTypes.find((type) => type.id === typeId);
+            if (!nextType) return;
+            applyTypeToConfig(nextType, true);
+            alert(`抽選タイプ「${nextType.name}」を適用しました。`);
+            return;
+          }
+          if (action === "save") {
+            saveTypeFromItem(item);
+            return;
+          }
+          if (action === "delete") {
+            deleteType(typeId);
+          }
+        });
+
+        typeList.addEventListener("input", (event) => {
+          const target = event.target;
+          if (!(target instanceof HTMLElement)) return;
+          const item = target.closest(".type-item");
+          if (!item) return;
+          updateTypePreview(item);
+        });
+      }
     }
 
     function resetStateForCurrentPart() {
@@ -863,16 +1662,12 @@
     if (applyConfigButton) {
       applyConfigButton.addEventListener("click", () => {
         const totalTickets = parseInt(inputTotalTickets.value, 10);
-        const totalWinsInput = parseInt(inputTotalWins.value, 10);
         const winText = inputWinText.value.trim() || "大当たり！";
-        const titleText = inputTitle.value.trim() || "ローカルガチャ抽選機";
+        const activeType = lotteryState.lotteryTypes.find((type) => type.id === lotteryState.activeTypeId);
+        const activeTypeTotalWins = activeType ? Number(activeType.totalWins) || 0 : 0;
 
         if (isNaN(totalTickets) || totalTickets <= 0) {
           alert("総くじ数は1以上の整数で入力してください。");
-          return;
-        }
-        if (isNaN(totalWinsInput) || totalWinsInput < 0) {
-          alert("合計当たり本数は0以上の整数で入力してください。");
           return;
         }
 
@@ -916,38 +1711,116 @@
           });
         });
 
-        if (sumPrizeWins !== totalWinsInput) {
+        if (sumPrizeWins !== activeTypeTotalWins) {
           alert(
             "各画像の当たり本数の合計 (" +
               sumPrizeWins +
-              ") と、合計当たり本数 (" +
-              totalWinsInput +
+              ") と、現在使用中の抽選タイプの当たり本数 (" +
+              activeTypeTotalWins +
               ") が一致していません。"
           );
           return;
         }
-        if (totalWinsInput > totalTickets) {
-          alert("合計当たり本数は総くじ数以下にしてください。");
+        if (activeTypeTotalWins > totalTickets) {
+          alert("現在使用中の抽選タイプの当たり本数は総くじ数以下にしてください。");
           return;
         }
 
         lotteryState.prizes = prizes;
         lotteryState.config.totalTickets = totalTickets;
-        lotteryState.config.totalWins = totalWinsInput;
-        lotteryState.config.title = titleText;
         lotteryState.config.winText = winText;
+        lotteryState.config.showWinsEndedLabel = inputShowWinsEnded ? inputShowWinsEnded.checked : false;
         if (inputStartSoundMuted) {
           lotteryState.config.startSoundMuted = inputStartSoundMuted.checked;
         }
+        syncTypeTicketsToCommonTotal();
 
         resetStateForCurrentPart();
         saveLotteryState();
         updateConfigInputs();
-        alert("設定を保存してリセットしました。ガチャ画面に戻ってください。");
+        renderActiveTypeCard();
+        renderTypeList();
+        alert("共通設定を保存して反映しました。ガチャ画面に戻って確認してください。");
+      });
+    }
+
+    function exportSettings() {
+      const exportData = {
+        config: lotteryState.config,
+        lotteryTypes: lotteryState.lotteryTypes || [],
+        prizes: lotteryState.prizes || [],
+        activeTypeId: lotteryState.activeTypeId || null,
+      };
+      const json = JSON.stringify(exportData, null, 2);
+      const blob = new Blob([json], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const now = new Date();
+      const dateStr =
+        now.getFullYear().toString() +
+        String(now.getMonth() + 1).padStart(2, "0") +
+        String(now.getDate()).padStart(2, "0");
+      a.href = url;
+      a.download = `gacha-settings-${dateStr}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importSettingsFromFile(file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (!data || typeof data !== "object" || !data.config || !Array.isArray(data.prizes)) {
+            alert("ファイルの形式が正しくありません。");
+            return;
+          }
+          if (!confirm("この設定を読み込みますか？\n現在の設定が上書きされ、進行状況はリセットされます。")) {
+            return;
+          }
+          lotteryState.config = data.config;
+          lotteryState.prizes = data.prizes;
+          lotteryState.lotteryTypes = Array.isArray(data.lotteryTypes) ? data.lotteryTypes : [];
+          lotteryState.activeTypeId = data.activeTypeId || null;
+          ensurePrizesInitialized();
+          ensureLotteryTypesInitialized();
+          saveThemeColor(lotteryState.config.themeColor);
+          resetStateForCurrentPart();
+          saveLotteryState();
+          updateConfigInputs();
+          renderActiveTypeCard();
+          renderTypeList();
+          applyThemeToDocument();
+          setupImageSettings();
+          setupSoundSettings();
+          alert("設定を読み込みました。");
+        } catch (err) {
+          alert("ファイルの読み込みに失敗しました。");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    const exportBtn = document.getElementById("export-settings-btn");
+    const importBtn = document.getElementById("import-settings-btn");
+    const importFileInput = document.getElementById("import-file-input");
+    if (exportBtn) {
+      exportBtn.addEventListener("click", exportSettings);
+    }
+    if (importBtn && importFileInput) {
+      importBtn.addEventListener("click", () => importFileInput.click());
+      importFileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) {
+          importSettingsFromFile(file);
+          importFileInput.value = "";
+        }
       });
     }
 
     updateConfigInputs();
+    applyThemeToDocument();
+    setupLotteryTypeUI();
     setupImageSettings();
     setupSoundSettings();
   </script>
