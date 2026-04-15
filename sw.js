@@ -1,4 +1,4 @@
-const CACHE_NAME = "gacha-pwa-v5";
+const CACHE_NAME = "gacha-pwa-v6";
 const ASSETS = [
   "index.html",
   "settings.html",
@@ -67,14 +67,18 @@ self.addEventListener("fetch", (event) => {
   if (request.headers.has("range")) return;
 
   if (request.mode === "navigate") {
-    if (url.pathname.endsWith("/settings.html")) {
-      event.respondWith(
-        caches.match(SETTINGS_URL).then((cached) => cached || fetch(request))
-      );
-      return;
-    }
+    const fallbackUrl = url.pathname.endsWith("/settings.html")
+      ? SETTINGS_URL
+      : INDEX_URL;
     event.respondWith(
-      caches.match(INDEX_URL).then((cached) => cached || fetch(request))
+      fetch(request)
+        .then((response) => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+          return response;
+        })
+        .catch(() => caches.match(request))
+        .then((response) => response || caches.match(fallbackUrl))
     );
     return;
   }

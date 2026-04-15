@@ -79,6 +79,21 @@
       text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
     }
 
+    .wins-ended-label {
+      display: inline-block;
+      align-self: center;
+      background: var(--salmon-dark);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: bold;
+      padding: 3px 12px;
+      border-radius: 999px;
+      letter-spacing: 0.5px;
+    }
+    .wins-ended-label[hidden] {
+      display: none;
+    }
+
     .description {
       font-size: 0.9rem;
       color: #666;
@@ -89,7 +104,7 @@
       background: #ffffff;
       border-radius: 18px;
       padding: 10px;
-      box-shadow: 0 10px 24px rgba(255, 153, 153, 0.25);
+      box-shadow: 0 10px 24px rgba(var(--salmon-rgb), 0.25);
       position: relative;
       overflow: hidden;
     }
@@ -185,7 +200,7 @@
       padding: 8px;
       text-align: left;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7),
-        0 6px 12px rgba(255, 153, 153, 0.2);
+        0 6px 12px rgba(var(--salmon-rgb), 0.2);
     }
 
     .summary-label {
@@ -276,11 +291,11 @@
       );
       color: #ffffff;
       text-shadow: 0 2px 0 rgba(255, 255, 255, 0.2),
-        0 4px 10px rgba(200, 90, 90, 0.45);
-      box-shadow: 0 12px 20px rgba(255, 153, 153, 0.28),
-        0 10px 18px rgba(220, 110, 110, 0.22),
+        0 4px 10px rgba(var(--salmon-dark-rgb), 0.45);
+      box-shadow: 0 12px 20px rgba(var(--salmon-rgb), 0.28),
+        0 10px 18px rgba(var(--salmon-deep-rgb), 0.22),
         inset 0 10px 14px rgba(255, 255, 255, 0.7),
-        inset 0 -12px 16px rgba(200, 90, 90, 0.25);
+        inset 0 -12px 16px rgba(var(--salmon-dark-rgb), 0.25);
       cursor: pointer;
       transition: transform 0.08s ease-out, box-shadow 0.08s ease-out,
         opacity 0.2s;
@@ -295,7 +310,7 @@
       border-radius: 999px;
       border: 2px solid rgba(255, 255, 255, 0.65);
       box-shadow: inset 0 4px 10px rgba(255, 255, 255, 0.45),
-        inset 0 -6px 12px rgba(180, 90, 120, 0.18);
+        inset 0 -6px 12px rgba(var(--salmon-deep-rgb), 0.18);
       pointer-events: none;
     }
 
@@ -327,10 +342,10 @@
 
     .gacha-button:active {
       transform: translateY(2px) scale(0.98);
-      box-shadow: 0 8px 14px rgba(255, 153, 153, 0.24),
+      box-shadow: 0 8px 14px rgba(var(--salmon-rgb), 0.24),
         0 3px 0 var(--salmon-dark),
         inset 0 6px 10px rgba(255, 255, 255, 0.4),
-        inset 0 -10px 14px rgba(200, 90, 90, 0.3);
+        inset 0 -10px 14px rgba(var(--salmon-dark-rgb), 0.3);
     }
 
     .gacha-button[disabled] {
@@ -357,9 +372,9 @@
         var(--salmon-light),
         var(--salmon-accent)
       );
-      color: #7a2b2b;
+      color: var(--salmon-dark);
       text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
-      box-shadow: 0 6px 12px rgba(255, 153, 153, 0.24),
+      box-shadow: 0 6px 12px rgba(var(--salmon-rgb), 0.24),
         inset 0 1px 0 rgba(255, 255, 255, 0.75);
       cursor: pointer;
     }
@@ -373,7 +388,7 @@
       border-radius: 14px;
       background: var(--salmon-lighter);
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6),
-        0 4px 10px rgba(255, 153, 153, 0.14);
+        0 4px 10px rgba(var(--salmon-rgb), 0.14);
       font-size: 0.9rem;
     }
 
@@ -400,11 +415,11 @@
         var(--salmon-light),
         var(--salmon-accent)
       );
-      color: #7a2b2b;
+      color: var(--salmon-dark);
       text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 3px 8px rgba(255, 153, 153, 0.24);
+      box-shadow: 0 3px 8px rgba(var(--salmon-rgb), 0.24);
     }
 
     .sub-buttons {
@@ -425,7 +440,7 @@
         var(--salmon-lighter),
         var(--salmon-light)
       );
-      color: #7a2b2b;
+      color: var(--salmon-dark);
       cursor: pointer;
     }
 
@@ -444,7 +459,7 @@
       background: transparent;
       color: var(--salmon-deep);
       text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7),
-        0 3px 10px rgba(200, 90, 90, 0.25);
+        0 3px 10px rgba(var(--salmon-dark-rgb), 0.25);
       width: fit-content;
     }
 
@@ -549,7 +564,7 @@
         var(--salmon-lighter),
         var(--salmon-light)
       );
-      color: #7a2b2b;
+      color: var(--salmon-dark);
       cursor: pointer;
     }
 
@@ -580,7 +595,7 @@
         var(--salmon-lighter),
         var(--salmon-light)
       );
-      color: #7a2b2b;
+      color: var(--salmon-dark);
       text-decoration: none;
       font-weight: 700;
     }
@@ -816,6 +831,7 @@
   <div class="app">
     <div class="first-view">
       <h1 id="app-title">ローカルガチャ抽選機</h1>
+      <div id="wins-ended-label" class="wins-ended-label" hidden>当たり本数終了</div>
 
       <div class="machine">
       <div class="window">
@@ -1121,6 +1137,7 @@
 
     // ===== 抽選ロジック用状態管理 =====
     const LOTTERY_STORAGE_KEY = "gachaLotteryStateV6";
+    const THEME_STORAGE_KEY = "gachaThemeColorV1";
     const LEGACY_LOTTERY_KEYS = [
       "gachaLotteryStateV5",
       "gachaLotteryStateV4",
@@ -1151,6 +1168,8 @@
         sessionRemainingDraws: null, // ★ 初期は上限なし
       },
       lastDraw: null, // {outcome, prizeKey}
+      lotteryTypes: [],
+      activeTypeId: null,
     };
 
     function loadLotteryState() {
@@ -1233,9 +1252,29 @@
       } catch (e) {}
     }
 
+    function saveThemeColor(color) {
+      try {
+        localStorage.setItem(THEME_STORAGE_KEY, color || "#ff9999");
+      } catch (e) {}
+    }
+
+    function loadThemeColor() {
+      try {
+        return localStorage.getItem(THEME_STORAGE_KEY) || null;
+      } catch (e) {
+        return null;
+      }
+    }
+
     function ensurePrizesInitialized() {
       if (!Array.isArray(lotteryState.prizes)) {
         lotteryState.prizes = [];
+      }
+      if (!Array.isArray(lotteryState.lotteryTypes)) {
+        lotteryState.lotteryTypes = [];
+      }
+      if (!("activeTypeId" in lotteryState)) {
+        lotteryState.activeTypeId = null;
       }
 
       const existingKeys = new Set(lotteryState.prizes.map((p) => p.key));
@@ -1325,6 +1364,8 @@
         lotteryState.state.personWinCount = 0;
       }
 
+      ensureLotteryTypesInitialized();
+
       if (
         lotteryState.config.maxSessionDraw != null &&
         (lotteryState.state.sessionRemainingDraws == null ||
@@ -1338,11 +1379,115 @@
       saveLotteryState();
     }
 
+    function hexToRgb(hex) {
+      const normalized = String(hex || "").replace("#", "");
+      if (normalized.length !== 6) {
+        return { r: 255, g: 153, b: 153 };
+      }
+      return {
+        r: parseInt(normalized.slice(0, 2), 16),
+        g: parseInt(normalized.slice(2, 4), 16),
+        b: parseInt(normalized.slice(4, 6), 16),
+      };
+    }
+
+    function rgbToHex(r, g, b) {
+      return (
+        "#" +
+        [r, g, b]
+          .map((value) => Math.max(0, Math.min(255, Math.round(value))).toString(16).padStart(2, "0"))
+          .join("")
+      );
+    }
+
+    function mixHex(hexA, hexB, ratio) {
+      const a = hexToRgb(hexA);
+      const b = hexToRgb(hexB);
+      const t = Math.max(0, Math.min(1, ratio));
+      return rgbToHex(
+        a.r + (b.r - a.r) * t,
+        a.g + (b.g - a.g) * t,
+        a.b + (b.b - a.b) * t
+      );
+    }
+
+    function buildThemeFromColor(color) {
+      const base = color || "#ff9999";
+      return {
+        base,
+        deep: mixHex(base, "#000000", 0.18),
+        dark: mixHex(base, "#000000", 0.28),
+        accent: mixHex(base, "#ffffff", 0.26),
+        light: mixHex(base, "#ffffff", 0.68),
+        lighter: mixHex(base, "#ffffff", 0.82),
+      };
+    }
+
+    function getTypeDisplayTitle(type) {
+      if (type && type.title && type.title.trim() !== "") {
+        return type.title.trim();
+      }
+      if (type && type.name && type.name.trim() !== "") {
+        return type.name.trim();
+      }
+      return "ローカルガチャ抽選機";
+    }
+
+    function createLotteryType(seed) {
+      const source = seed || {};
+      return {
+        id: source.id || "default-type",
+        name: source.name || "パターンA",
+        title: source.title || lotteryState.config.title || "Boosty Winter Party 2026",
+        totalTickets: Number(source.totalTickets) > 0 ? Number(source.totalTickets) : Number(lotteryState.config.totalTickets) || 100,
+        totalWins: Number(source.totalWins) >= 0 ? Number(source.totalWins) : Number(lotteryState.config.totalWins) || 10,
+        themeColor: source.themeColor || lotteryState.config.themeColor || "#ff9999",
+        winText: source.winText || "",
+      };
+    }
+
+    function syncTypeTicketsToCommonTotal() {
+      const totalTickets = Number(lotteryState.config.totalTickets) || 0;
+      lotteryState.lotteryTypes.forEach((type) => {
+        type.totalTickets = totalTickets;
+      });
+    }
+
+    function ensureLotteryTypesInitialized() {
+      if (!Array.isArray(lotteryState.lotteryTypes)) {
+        lotteryState.lotteryTypes = [];
+      }
+      if (lotteryState.lotteryTypes.length === 0) {
+        const defaultType = createLotteryType({
+          id: "default-type",
+          name: "パターンA",
+          title: lotteryState.config.title || "Boosty Winter Party 2026",
+          totalTickets: lotteryState.config.totalTickets,
+          totalWins: lotteryState.config.totalWins,
+          themeColor: lotteryState.config.themeColor || "#ff9999",
+        });
+        lotteryState.lotteryTypes.push(defaultType);
+        lotteryState.activeTypeId = defaultType.id;
+      }
+      if (!lotteryState.activeTypeId) {
+        lotteryState.activeTypeId = lotteryState.lotteryTypes[0].id;
+      }
+      syncTypeTicketsToCommonTotal();
+      const activeType = lotteryState.lotteryTypes.find((type) => type.id === lotteryState.activeTypeId);
+      if (activeType) {
+        lotteryState.config.totalWins = activeType.totalWins;
+        lotteryState.config.title = getTypeDisplayTitle(activeType);
+        lotteryState.config.themeColor = activeType.themeColor || "#ff9999";
+        saveThemeColor(lotteryState.config.themeColor);
+      }
+    }
+
     loadLotteryState();
     ensurePrizesInitialized();
 
     // ===== DOM 取得 =====
     const appTitle = document.getElementById("app-title");
+    const winsEndedLabel = document.getElementById("wins-ended-label");
     const resultImage = document.getElementById("result-image");
     const placeholderText = document.getElementById("placeholder-text");
     const gachaButtons = Array.from(document.querySelectorAll(".gacha-button"));
@@ -1505,6 +1650,47 @@
         "ローカルガチャ抽選機";
     }
 
+    function applyThemeToDocument() {
+      const activeType = lotteryState.lotteryTypes
+        ? lotteryState.lotteryTypes.find((t) => t.id === lotteryState.activeTypeId)
+        : null;
+      const color =
+        (activeType && activeType.themeColor) ||
+        (lotteryState.config && lotteryState.config.themeColor) ||
+        loadThemeColor() ||
+        "#ff9999";
+      const theme = buildThemeFromColor(color);
+      let styleEl = document.getElementById("theme-override-style");
+      if (!styleEl) {
+        styleEl = document.createElement("style");
+        styleEl.id = "theme-override-style";
+        document.head.appendChild(styleEl);
+      }
+      const rgb = hexToRgb(theme.base);
+      const deepRgb = hexToRgb(theme.deep);
+      const darkRgb = hexToRgb(theme.dark);
+      styleEl.textContent = [
+        ":root {",
+        `  --salmon: ${theme.base} !important;`,
+        `  --salmon-deep: ${theme.deep} !important;`,
+        `  --salmon-dark: ${theme.dark} !important;`,
+        `  --salmon-accent: ${theme.accent} !important;`,
+        `  --salmon-light: ${theme.light} !important;`,
+        `  --salmon-lighter: ${theme.lighter} !important;`,
+        `  --salmon-rgb: ${rgb.r}, ${rgb.g}, ${rgb.b} !important;`,
+        `  --salmon-deep-rgb: ${deepRgb.r}, ${deepRgb.g}, ${deepRgb.b} !important;`,
+        `  --salmon-dark-rgb: ${darkRgb.r}, ${darkRgb.g}, ${darkRgb.b} !important;`,
+        "}",
+        "body {",
+        `  background: radial-gradient(circle at top, ${theme.lighter} 0%, ${theme.light} 45%, #fff 100%) !important;`,
+        "}",
+      ].join("\n");
+      const themeMeta = document.querySelector('meta[name="theme-color"]');
+      if (themeMeta) {
+        themeMeta.setAttribute("content", theme.base);
+      }
+    }
+
     function clearResultDisplay() {
       resultText.textContent = "";
       resultText.classList.remove("is-win", "is-lose");
@@ -1558,7 +1744,18 @@
     updateStatusDisplay();
     updateConfigInputs();
     updateTitleDisplay();
+    applyThemeToDocument();
     updateButtonsState();
+
+    // ページ読み込み時、既に当たり本数が0なら終了ラベルを表示
+    if (
+      winsEndedLabel &&
+      lotteryState.config.showWinsEndedLabel &&
+      lotteryState.state.remainingWins === 0 &&
+      lotteryState.state.drawnCount > 0
+    ) {
+      winsEndedLabel.hidden = false;
+    }
 
     // ===== 抽選ロジック =====
     function resetStateForCurrentPart() {
@@ -1585,6 +1782,7 @@
       };
       lotteryState.lastDraw = null;
       saveLotteryState();
+      if (winsEndedLabel) winsEndedLabel.hidden = true;
       updateStatusDisplay();
       updateButtonsState();
       updateConfigInputs();
@@ -1716,7 +1914,10 @@
       updateStatusDisplay();
       updateButtonsState();
 
-      return { outcome, prizeKey };
+      // 当たり本数が0になった瞬間を検知
+      const justDepletedWins = outcome === "win" && lotteryState.state.remainingWins === 0;
+
+      return { outcome, prizeKey, justDepletedWins };
     }
 
     function undoLastDraw() {
@@ -1837,7 +2038,7 @@
           return;
         }
 
-        const { outcome, prizeKey } = drawResult;
+        const { outcome, prizeKey, justDepletedWins } = drawResult;
         const finalImageSrc = getFinalImageForOutcome(outcome, prizeKey);
         resultImage.src = finalImageSrc;
         resultImage.style.visibility = "visible";
@@ -1849,7 +2050,11 @@
 
         const c2 = lotteryState.config;
         if (outcome === "win") {
-          resultText.textContent = c2.winText || "当たり！";
+          const activeType = lotteryState.lotteryTypes
+            ? lotteryState.lotteryTypes.find((t) => t.id === lotteryState.activeTypeId)
+            : null;
+          const resolvedWinText = (activeType && activeType.winText) || c2.winText || "当たり！";
+          resultText.textContent = resolvedWinText;
           resultText.classList.add("is-win");
           playResultSound("win");
           launchConfetti();
@@ -1858,6 +2063,10 @@
           resultText.textContent = "ハズレ…";
           resultText.classList.add("is-lose");
           playResultSound("lose");
+        }
+
+        if (justDepletedWins && c2.showWinsEndedLabel && winsEndedLabel) {
+          winsEndedLabel.hidden = false;
         }
 
         const resetDelay = outcome === "win"
@@ -1971,10 +2180,18 @@
         lotteryState.config.title = titleText;
         lotteryState.config.winText = winText;
 
+        const activeType = lotteryState.lotteryTypes.find((type) => type.id === lotteryState.activeTypeId);
+        if (activeType) {
+          activeType.totalTickets = totalTickets;
+          activeType.totalWins = totalWinsInput;
+          activeType.title = titleText;
+        }
+
         resetStateForCurrentPart();
         saveLotteryState();
         updateConfigInputs();
         updateTitleDisplay();
+        applyThemeToDocument();
       });
     }
 
