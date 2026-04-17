@@ -950,9 +950,6 @@
 
     function loadImageSources() {
       try {
-        try {
-          localStorage.removeItem(IMAGE_STORAGE_KEY);
-        } catch (e) {}
         const raw = localStorage.getItem(IMAGE_STORAGE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
@@ -986,9 +983,6 @@
 
     function loadSoundSources() {
       try {
-        try {
-          localStorage.removeItem(SOUND_STORAGE_KEY);
-        } catch (e) {}
         const raw = localStorage.getItem(SOUND_STORAGE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);

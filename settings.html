@@ -1746,10 +1746,13 @@
 
     function exportSettings() {
       const exportData = {
+        version: 1,
         config: lotteryState.config,
         lotteryTypes: lotteryState.lotteryTypes || [],
         prizes: lotteryState.prizes || [],
         activeTypeId: lotteryState.activeTypeId || null,
+        imageSources: imageSources || {},
+        soundSources: soundSources || {},
       };
       const json = JSON.stringify(exportData, null, 2);
       const blob = new Blob([json], { type: "application/json" });
@@ -1782,6 +1785,14 @@
           lotteryState.prizes = data.prizes;
           lotteryState.lotteryTypes = Array.isArray(data.lotteryTypes) ? data.lotteryTypes : [];
           lotteryState.activeTypeId = data.activeTypeId || null;
+          imageSources = data.imageSources && typeof data.imageSources === "object"
+            ? data.imageSources
+            : {};
+          soundSources = data.soundSources && typeof data.soundSources === "object"
+            ? data.soundSources
+            : {};
+          saveImageSources();
+          saveSoundSources();
           ensurePrizesInitialized();
           ensureLotteryTypesInitialized();
           saveThemeColor(lotteryState.config.themeColor);
