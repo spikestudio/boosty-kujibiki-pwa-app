@@ -492,19 +492,9 @@
 
       <div class="settings-section-title">共通設定</div>
       <p class="note">
-        総くじ数（玉の総数）は全タイプ共通です。<br />
-        当たり本数は抽選タイプごとに設定します。画像設定の当たり本数合計は、現在使用中の抽選タイプの当たり本数と一致している必要があります。
+        総くじ数（玉の総数）と当たり本数は抽選タイプごとに設定します。<br />
+        画像設定の当たり本数合計は、現在使用中の抽選タイプの当たり本数と一致している必要があります。
       </p>
-      <div class="settings-row">
-        <label for="input-total-tickets">総くじ数</label>
-        <input
-          id="input-total-tickets"
-          type="number"
-          min="1"
-          step="1"
-          placeholder="例: 100"
-        />
-      </div>
       <div class="settings-row">
         <label for="input-win-text">当たりテキスト（共通）</label>
         <input
@@ -727,6 +717,7 @@
         <input id="input-start-sound-muted" type="checkbox" />
         <span class="small-label">ONでガラガラ音を再生しません</span>
       </div>
+
 
       <div class="settings-footer">
         ※ ブラウザのストレージを削除すると、抽選状態・画像・サウンド設定は再度設定が必要になります。
@@ -1063,7 +1054,7 @@
     }
 
     function getTypeRateText(type) {
-      const totalTickets = Number(lotteryState.config && lotteryState.config.totalTickets) || Number(type && type.totalTickets) || 0;
+      const totalTickets = Number(type && type.totalTickets) || 0;
       const totalWins = Number(type && type.totalWins) || 0;
       if (totalTickets <= 0) return "0%";
       return ((totalWins / totalTickets) * 100).toFixed(totalWins % totalTickets === 0 ? 0 : 1) + "%";
@@ -1107,22 +1098,23 @@
       const source = seed || {};
       const color = source.themeColor != null ? source.themeColor : getPresetColor(lotteryState.lotteryTypes.length);
       const name = source.name || `パターン${lotteryState.lotteryTypes.length + 1}`;
+      const activeType = (lotteryState.lotteryTypes || []).find(
+        (type) => type.id === lotteryState.activeTypeId
+      );
       return {
         id: source.id || `${slugifyTypeName(name)}-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
         name,
         title: source.title || source.name || "ローカルガチャ抽選機",
-        totalTickets: Number(source.totalTickets) > 0 ? Number(source.totalTickets) : Number(lotteryState.config.totalTickets) || 100,
+        totalTickets:
+          Number(source.totalTickets) > 0
+            ? Number(source.totalTickets)
+            : Number(activeType && activeType.totalTickets) ||
+              Number(lotteryState.config.totalTickets) ||
+              100,
         totalWins: Number(source.totalWins) >= 0 ? Number(source.totalWins) : Number(lotteryState.config.totalWins) || 10,
         themeColor: color,
         winText: source.winText || "",
       };
-    }
-
-    function syncTypeTicketsToCommonTotal() {
-      const totalTickets = Number(lotteryState.config.totalTickets) || 0;
-      lotteryState.lotteryTypes.forEach((type) => {
-        type.totalTickets = totalTickets;
-      });
     }
 
     function scalePrizeWinsToTotal(targetTotalWins) {
@@ -1187,12 +1179,25 @@
         lotteryState.lotteryTypes.push(defaultType);
         lotteryState.activeTypeId = defaultType.id;
       }
+
+      lotteryState.lotteryTypes.forEach((type) => {
+        if (Number(type.totalTickets) <= 0) {
+          type.totalTickets = Number(lotteryState.config.totalTickets) || 100;
+        }
+        if (Number(type.totalWins) < 0 || Number.isNaN(Number(type.totalWins))) {
+          type.totalWins = Number(lotteryState.config.totalWins) || 0;
+        }
+      });
+
       if (!lotteryState.activeTypeId) {
         lotteryState.activeTypeId = lotteryState.lotteryTypes[0].id;
       }
-      syncTypeTicketsToCommonTotal();
+      if (!lotteryState.lotteryTypes.some((type) => type.id === lotteryState.activeTypeId)) {
+        lotteryState.activeTypeId = lotteryState.lotteryTypes[0].id;
+      }
       const activeType = lotteryState.lotteryTypes.find((type) => type.id === lotteryState.activeTypeId);
       if (activeType) {
+        lotteryState.config.totalTickets = Number(activeType.totalTickets) || 100;
         lotteryState.config.totalWins = activeType.totalWins;
         lotteryState.config.title = getTypeDisplayTitle(activeType);
         lotteryState.config.themeColor = activeType.themeColor || "#ff9999";
@@ -1202,13 +1207,10 @@
     loadLotteryState();
     ensurePrizesInitialized();
 
-    const inputTotalTickets = document.getElementById("input-total-tickets");
     const inputWinText = document.getElementById("input-win-text");
     const inputShowWinsEnded = document.getElementById("input-show-wins-ended");
     const applyConfigButton = document.getElementById("apply-config-button");
-    const inputStartSoundMuted = document.getElementById(
-      "input-start-sound-muted"
-    );
+    const inputStartSoundMuted = document.getElementById("input-start-sound-muted");
     const activeTypeCard = document.getElementById("active-type-card");
     const typeList = document.getElementById("type-list");
     const emptyTypes = document.getElementById("empty-types");
@@ -1222,11 +1224,9 @@
 
     function updateConfigInputs() {
       const c = lotteryState.config;
-      if (inputTotalTickets) inputTotalTickets.value = c.totalTickets;
       if (inputWinText) inputWinText.value = c.winText || "";
       if (inputShowWinsEnded) inputShowWinsEnded.checked = !!c.showWinsEndedLabel;
-      if (inputStartSoundMuted)
-        inputStartSoundMuted.checked = c.startSoundMuted !== false;
+      if (inputStartSoundMuted) inputStartSoundMuted.checked = !!lotteryState.config.startSoundMuted;
     }
 
     function renderActiveTypeCard() {
@@ -1244,7 +1244,7 @@
         <div class="active-type-card-body">
           <div class="active-type-card-label">現在使用中の抽選タイプ</div>
           <div class="active-type-card-title">${escapeHtml(activeType.name)}</div>
-          <div class="active-type-card-meta">当たり ${activeType.totalWins}本 ／ 総くじ ${lotteryState.config.totalTickets}本 ／ ${getTypeRateText(activeType)}</div>
+          <div class="active-type-card-meta">当たり ${activeType.totalWins}本 ／ 総くじ ${activeType.totalTickets}本 ／ ${getTypeRateText(activeType)}</div>
         </div>
       `;
     }
@@ -1285,7 +1285,7 @@
               <div class="type-item-header">
                 <div class="type-color-chip" style="background:${theme.base}"></div>
                 <div class="type-name">${escapeHtml(type.name)}</div>
-                <div class="type-stats">${type.totalWins} / ${lotteryState.config.totalTickets}</div>
+                <div class="type-stats">${type.totalWins} / ${type.totalTickets}</div>
                 <div class="type-rate">${getTypeRateText(type)}</div>
                 ${isActive ? '<div class="type-badge">使用中</div>' : ""}
                 <div class="type-inline-actions">
@@ -1303,6 +1303,9 @@
                   </label>
                   <label>当たり本数
                     <input type="number" min="0" step="1" data-field="totalWins" value="${type.totalWins}" />
+                  </label>
+                  <label>総くじ数
+                    <input type="number" min="1" step="1" data-field="totalTickets" value="${type.totalTickets}" />
                   </label>
                   <label class="full">テーマカラー
                     <input type="color" data-field="themeColor" value="${escapeHtml(type.themeColor || "#ff9999")}" />
@@ -1324,7 +1327,7 @@
 
     function applyTypeToConfig(type, shouldReset) {
       lotteryState.activeTypeId = type.id;
-      syncTypeTicketsToCommonTotal();
+      lotteryState.config.totalTickets = Number(type.totalTickets) || 100;
       lotteryState.config.totalWins = type.totalWins;
       lotteryState.config.title = getTypeDisplayTitle(type);
       lotteryState.config.themeColor = type.themeColor || "#ff9999";
@@ -1383,8 +1386,12 @@
 
     function addLotteryType() {
       const nextIndex = lotteryState.lotteryTypes.length;
+      const activeType = lotteryState.lotteryTypes.find(
+        (type) => type.id === lotteryState.activeTypeId
+      );
       const nextType = createLotteryType({
         name: `パターン${nextIndex + 1}`,
+        totalTickets: Number(activeType && activeType.totalTickets) || 100,
         totalWins: lotteryState.config.totalWins,
         title: getTypeDisplayTitle(lotteryState.lotteryTypes.find((type) => type.id === lotteryState.activeTypeId) || {}),
         themeColor: getNextPresetColor(),
@@ -1409,6 +1416,10 @@
       if (!target) return;
       const name = item.querySelector('[data-field="name"]').value.trim();
       const title = item.querySelector('[data-field="title"]').value.trim();
+      const totalTickets = parseInt(
+        item.querySelector('[data-field="totalTickets"]').value,
+        10
+      );
       const totalWins = parseInt(item.querySelector('[data-field="totalWins"]').value, 10);
       const themeColor = item.querySelector('[data-field="themeColor"]').value || "#ff9999";
       const winTextInput = item.querySelector('[data-field="winText"]');
@@ -1422,14 +1433,18 @@
         alert("当たり本数は0以上の整数で入力してください。");
         return;
       }
-      if (totalWins > lotteryState.config.totalTickets) {
-        alert("当たり本数は共通設定の総くじ数以下にしてください。");
+      if (Number.isNaN(totalTickets) || totalTickets <= 0) {
+        alert("総くじ数は1以上の整数で入力してください。");
+        return;
+      }
+      if (totalWins > totalTickets) {
+        alert("当たり本数はこの抽選タイプの総くじ数以下にしてください。");
         return;
       }
 
       target.name = name;
       target.title = title;
-      target.totalTickets = lotteryState.config.totalTickets;
+      target.totalTickets = totalTickets;
       target.totalWins = totalWins;
       target.themeColor = themeColor;
       target.winText = winText;
@@ -1661,13 +1676,12 @@
 
     if (applyConfigButton) {
       applyConfigButton.addEventListener("click", () => {
-        const totalTickets = parseInt(inputTotalTickets.value, 10);
         const winText = inputWinText.value.trim() || "大当たり！";
         const activeType = lotteryState.lotteryTypes.find((type) => type.id === lotteryState.activeTypeId);
         const activeTypeTotalWins = activeType ? Number(activeType.totalWins) || 0 : 0;
 
-        if (isNaN(totalTickets) || totalTickets <= 0) {
-          alert("総くじ数は1以上の整数で入力してください。");
+        if (!activeType) {
+          alert("現在使用中の抽選タイプが見つかりません。抽選タイプを選び直してください。");
           return;
         }
 
@@ -1721,19 +1735,18 @@
           );
           return;
         }
-        if (activeTypeTotalWins > totalTickets) {
+        if (activeTypeTotalWins > (Number(activeType.totalTickets) || 0)) {
           alert("現在使用中の抽選タイプの当たり本数は総くじ数以下にしてください。");
           return;
         }
 
         lotteryState.prizes = prizes;
-        lotteryState.config.totalTickets = totalTickets;
+        lotteryState.config.totalTickets = Number(activeType.totalTickets) || 100;
         lotteryState.config.winText = winText;
         lotteryState.config.showWinsEndedLabel = inputShowWinsEnded ? inputShowWinsEnded.checked : false;
         if (inputStartSoundMuted) {
           lotteryState.config.startSoundMuted = inputStartSoundMuted.checked;
         }
-        syncTypeTicketsToCommonTotal();
 
         resetStateForCurrentPart();
         saveLotteryState();
@@ -1782,8 +1795,25 @@
             return;
           }
           lotteryState.config = data.config;
+          if (!("startSoundMuted" in lotteryState.config)) {
+            lotteryState.config.startSoundMuted = true;
+          }
           lotteryState.prizes = data.prizes;
-          lotteryState.lotteryTypes = Array.isArray(data.lotteryTypes) ? data.lotteryTypes : [];
+          // --- 補完: totalTickets 欠損タイプへ config から補完 ---
+          let fallbackTickets = Number(data.config && data.config.totalTickets) || 100;
+          lotteryState.lotteryTypes = (Array.isArray(data.lotteryTypes) ? data.lotteryTypes : []).map(type => {
+            if (!('totalTickets' in type) || Number(type.totalTickets) <= 0) {
+              return { ...type, totalTickets: fallbackTickets };
+            }
+            return type;
+          });
+          // --- 0やNaNのtotalWinsも補完 ---
+          lotteryState.lotteryTypes = lotteryState.lotteryTypes.map(type => {
+            if (!('totalWins' in type) || Number(type.totalWins) < 0 || Number.isNaN(Number(type.totalWins))) {
+              return { ...type, totalWins: Number(data.config && data.config.totalWins) || 0 };
+            }
+            return type;
+          });
           lotteryState.activeTypeId = data.activeTypeId || null;
           imageSources = data.imageSources && typeof data.imageSources === "object"
             ? data.imageSources

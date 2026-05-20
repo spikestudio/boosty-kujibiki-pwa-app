@@ -1429,22 +1429,23 @@
 
     function createLotteryType(seed) {
       const source = seed || {};
+      const activeType = (lotteryState.lotteryTypes || []).find(
+        (type) => type.id === lotteryState.activeTypeId
+      );
       return {
         id: source.id || "default-type",
         name: source.name || "パターンA",
         title: source.title || lotteryState.config.title || "Boosty Winter Party 2026",
-        totalTickets: Number(source.totalTickets) > 0 ? Number(source.totalTickets) : Number(lotteryState.config.totalTickets) || 100,
+        totalTickets:
+          Number(source.totalTickets) > 0
+            ? Number(source.totalTickets)
+            : Number(activeType && activeType.totalTickets) ||
+              Number(lotteryState.config.totalTickets) ||
+              100,
         totalWins: Number(source.totalWins) >= 0 ? Number(source.totalWins) : Number(lotteryState.config.totalWins) || 10,
         themeColor: source.themeColor || lotteryState.config.themeColor || "#ff9999",
         winText: source.winText || "",
       };
-    }
-
-    function syncTypeTicketsToCommonTotal() {
-      const totalTickets = Number(lotteryState.config.totalTickets) || 0;
-      lotteryState.lotteryTypes.forEach((type) => {
-        type.totalTickets = totalTickets;
-      });
     }
 
     function ensureLotteryTypesInitialized() {
@@ -1463,12 +1464,25 @@
         lotteryState.lotteryTypes.push(defaultType);
         lotteryState.activeTypeId = defaultType.id;
       }
+
+      lotteryState.lotteryTypes.forEach((type) => {
+        if (Number(type.totalTickets) <= 0) {
+          type.totalTickets = Number(lotteryState.config.totalTickets) || 100;
+        }
+        if (Number(type.totalWins) < 0 || Number.isNaN(Number(type.totalWins))) {
+          type.totalWins = Number(lotteryState.config.totalWins) || 0;
+        }
+      });
+
       if (!lotteryState.activeTypeId) {
         lotteryState.activeTypeId = lotteryState.lotteryTypes[0].id;
       }
-      syncTypeTicketsToCommonTotal();
+      if (!lotteryState.lotteryTypes.some((type) => type.id === lotteryState.activeTypeId)) {
+        lotteryState.activeTypeId = lotteryState.lotteryTypes[0].id;
+      }
       const activeType = lotteryState.lotteryTypes.find((type) => type.id === lotteryState.activeTypeId);
       if (activeType) {
+        lotteryState.config.totalTickets = Number(activeType.totalTickets) || 100;
         lotteryState.config.totalWins = activeType.totalWins;
         lotteryState.config.title = getTypeDisplayTitle(activeType);
         lotteryState.config.themeColor = activeType.themeColor || "#ff9999";
