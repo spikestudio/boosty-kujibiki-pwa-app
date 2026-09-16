@@ -1,4 +1,4 @@
-const CACHE_NAME = "gacha-pwa-v6";
+const CACHE_NAME = "gacha-pwa-v7";
 const ASSETS = [
   "index.html",
   "settings.html",
@@ -6,9 +6,6 @@ const ASSETS = [
   "sw.js",
   "a.png",
   "b.png",
-  "c.png",
-  "d.png",
-  "e.png",
   "a_hit.png",
   "b_hit.png",
   "c_hit.png",

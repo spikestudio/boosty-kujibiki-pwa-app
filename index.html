@@ -1993,7 +1993,7 @@
       if (outcome === "win") {
         return getImageSrc("A", "a.png");
       }
-      return getImageSrc("E", "e.png");
+      return getImageSrc("B", "b.png");
     }
 
     function getEnabledPrizeKeys() {
@@ -2230,6 +2230,11 @@
       rows.forEach((row) => {
         const key = row.getAttribute("data-key");
         const preview = row.querySelector(".image-preview");
+        // 既定画像を同梱していないキー (C〜E) は壊れた画像アイコンを出さずに隠す
+        preview.style.visibility = "visible";
+        preview.onerror = () => {
+          preview.style.visibility = "hidden";
+        };
         if (imageSources[key]) {
           preview.src = imageSources[key];
           preview.style.opacity = "1";

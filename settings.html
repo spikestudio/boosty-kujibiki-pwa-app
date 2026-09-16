@@ -545,7 +545,7 @@
       <p class="note">
         A〜E の画像ごとに「有効／無効」「当たり／ハズレ」「当たり本数」「表示名（ラベル）」を設定できます。<br>
         各画像の当たり本数の合計が、現在使用中の抽選タイプの当たり本数と一致している必要があります。<br>
-        画像を設定しない場合は、同階層の a.png〜e.png が使われます。
+        画像を設定しない場合は、同階層の a.png（A）/ b.png（B）が使われます。C〜E は既定画像を同梱していません。
       </p>
 
       <div class="image-setting-row" data-key="A">
@@ -1606,6 +1606,11 @@
       rows.forEach((row) => {
         const key = row.getAttribute("data-key");
         const preview = row.querySelector(".image-preview");
+        // 既定画像を同梱していないキー (C〜E) は壊れた画像アイコンを出さずに隠す
+        preview.style.visibility = "visible";
+        preview.onerror = () => {
+          preview.style.visibility = "hidden";
+        };
         if (imageSources[key]) {
           preview.src = imageSources[key];
           preview.style.opacity = "1";
