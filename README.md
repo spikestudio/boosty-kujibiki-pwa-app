@@ -6,7 +6,7 @@ iPad/Safari でホーム画面に追加してオフラインでも使えるロ�
 - 3 つの START ボタンは同一動作のスロット風トリガー
 - 「今回の挑戦回数」を上部で即設定可能（次の人へでリセット）
 - 当たり/ハズレ画像 A〜E と当たり本数、当たりテキストを柔軟に設定
-- 画像・音声はローカルファイル選択または同階層の a.png〜e.png / roulette.mp3 / atari.mp3 / hazure.mp3 を自動読み込み
+- 画像・音声はローカルファイル選択または同階層の a.png（A）/ b.png（B）/ roulette.mp3 / atari.mp3 / hazure.mp3 を自動読み込み（C〜E は既定画像なし）
 - PWA 対応（manifest + Service Worker）。一度読み込めばオフラインでも利用可能
 
 ## 使い方（ローカル）
